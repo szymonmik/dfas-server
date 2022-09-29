@@ -15,6 +15,12 @@ public class DataSeeder
 	{
 		if (_dbContext.Database.CanConnect())
 		{
+			if (!_dbContext.Voivodeships.Any())
+			{
+				var voivodeships = GetVoivodeships();
+				_dbContext.Voivodeships.AddRange(voivodeships);
+				_dbContext.SaveChanges();
+			}
 			if (!_dbContext.Roles.Any())
 			{
 				var roles = GetRoles();
@@ -38,6 +44,79 @@ public class DataSeeder
 		}
 	}
 
+	private IEnumerable<Voivodeship> GetVoivodeships()
+	{
+		var voivodeships = new List<Voivodeship>()
+		{
+			new Voivodeship()
+			{
+				Name = "Dolnośląskie"
+			},
+			new Voivodeship()
+			{
+				Name = "Kujawsko-Pomorskie"
+			},
+			new Voivodeship()
+			{
+				Name = "Lubelskie"
+			},
+			new Voivodeship()
+			{
+				Name = "Lubuskie"
+			},
+			new Voivodeship()
+			{
+				Name = "Łódzkie"
+			},
+			new Voivodeship()
+			{
+				Name = "Małopolskie"
+			},
+			new Voivodeship()
+			{
+				Name = "Mazowieckie"
+			},
+			new Voivodeship()
+			{
+				Name = "Opolskie"
+			},
+			new Voivodeship()
+			{
+				Name = "Podkarpackie"
+			},
+			new Voivodeship()
+			{
+				Name = "Podlaskie"
+			},
+			new Voivodeship()
+			{
+				Name = "Pomorskie"
+			},
+			new Voivodeship()
+			{
+				Name = "Śląskie"
+			},
+			new Voivodeship()
+			{
+				Name = "Świętokrzyskie"
+			},
+			new Voivodeship()
+			{
+				Name = "Warmińsko-Mazurskie"
+			},
+			new Voivodeship()
+			{
+				Name = "Wielkopolskie"
+			},
+			new Voivodeship()
+			{
+				Name = "Zachodniopomorskie"
+			},
+			
+		};
+
+		return voivodeships;
+	}
 	private IEnumerable<Role> GetRoles()
 	{
 		var roles = new List<Role>()
@@ -114,11 +193,6 @@ public class DataSeeder
 			new Allergen()
 			{
 				Name = "Leszczyna",
-				AllergenTypeId = 2
-			},
-			new Allergen()
-			{
-				Name = "Brzoza",
 				AllergenTypeId = 2
 			},
 			new Allergen()
