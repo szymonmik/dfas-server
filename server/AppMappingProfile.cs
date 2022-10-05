@@ -10,6 +10,8 @@ public class AppMappingProfile : Profile
     {
         CreateMap<CreateProductDto, Product>();
 
+        CreateMap<Product, ProductDto>();
+
         CreateMap<CreateAllergenDto, Allergen>();
 
         /*CreateMap<Product, ProductDto>()

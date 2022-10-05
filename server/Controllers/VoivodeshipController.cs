@@ -30,7 +30,7 @@ public class VoivodeshipController : ControllerBase
 
         if (voivodeship is null)
         {
-            NotFound();
+            return NotFound();
         }
         
         return Ok(voivodeship);

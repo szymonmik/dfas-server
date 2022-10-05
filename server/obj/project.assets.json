@@ -2,7 +2,7 @@
   "version": 3,
   "targets": {
     "net6.0": {
-      "AutoMapper/11.0.1": {
+      "AutoMapper/12.0.0": {
         "type": "package",
         "dependencies": {
           "Microsoft.CSharp": "4.7.0"
@@ -12,6 +12,19 @@
         },
         "runtime": {
           "lib/netstandard2.1/AutoMapper.dll": {}
+        }
+      },
+      "AutoMapper.Extensions.Microsoft.DependencyInjection/12.0.0": {
+        "type": "package",
+        "dependencies": {
+          "AutoMapper": "12.0.0",
+          "Microsoft.Extensions.Options": "6.0.0"
+        },
+        "compile": {
+          "lib/netstandard2.1/AutoMapper.Extensions.Microsoft.DependencyInjection.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.1/AutoMapper.Extensions.Microsoft.DependencyInjection.dll": {}
         }
       },
       "Humanizer.Core/2.8.26": {
@@ -441,6 +454,44 @@
           }
         }
       },
+      "NLog/5.0.4": {
+        "type": "package",
+        "compile": {
+          "lib/netstandard2.0/NLog.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/NLog.dll": {}
+        }
+      },
+      "NLog.Extensions.Logging/5.0.4": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.Extensions.Configuration.Abstractions": "5.0.0",
+          "Microsoft.Extensions.Logging": "5.0.0",
+          "NLog": "5.0.4"
+        },
+        "compile": {
+          "lib/net5.0/NLog.Extensions.Logging.dll": {}
+        },
+        "runtime": {
+          "lib/net5.0/NLog.Extensions.Logging.dll": {}
+        }
+      },
+      "NLog.Web.AspNetCore/5.1.4": {
+        "type": "package",
+        "dependencies": {
+          "NLog.Extensions.Logging": "5.0.4"
+        },
+        "compile": {
+          "lib/net5.0/NLog.Web.AspNetCore.dll": {}
+        },
+        "runtime": {
+          "lib/net5.0/NLog.Web.AspNetCore.dll": {}
+        },
+        "frameworkReferences": [
+          "Microsoft.AspNetCore.App"
+        ]
+      },
       "Swashbuckle.AspNetCore/6.2.3": {
         "type": "package",
         "dependencies": {
@@ -721,19 +772,33 @@
     }
   },
   "libraries": {
-    "AutoMapper/11.0.1": {
-      "sha512": "WIadGC1pIwbnyTubvI577p3F++Bsj9q2Q3OaAc1I0QS+JhupN1xkdrPBhI9bPIeg63zM81tZplUNYkqU1HE5jQ==",
+    "AutoMapper/12.0.0": {
+      "sha512": "0Rmg0zI5AFu1O/y//o9VGyhxKjhggWpk9mOA1tp0DEVx40c61bs+lnQv+0jUq8XbniF7FKgIVvI1perqiMtLrA==",
       "type": "package",
-      "path": "automapper/11.0.1",
+      "path": "automapper/12.0.0",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
         "README.md",
-        "automapper.11.0.1.nupkg.sha512",
+        "automapper.12.0.0.nupkg.sha512",
         "automapper.nuspec",
         "icon.png",
         "lib/netstandard2.1/AutoMapper.dll",
         "lib/netstandard2.1/AutoMapper.xml"
+      ]
+    },
+    "AutoMapper.Extensions.Microsoft.DependencyInjection/12.0.0": {
+      "sha512": "XCJ4E3oKrbRl1qY9Mr+7uyC0xZj1+bqQjmQRWTiTKiVuuXTny+7YFWHi20tPjwkMukLbicN6yGlDy5PZ4wyi1w==",
+      "type": "package",
+      "path": "automapper.extensions.microsoft.dependencyinjection/12.0.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "README.md",
+        "automapper.extensions.microsoft.dependencyinjection.12.0.0.nupkg.sha512",
+        "automapper.extensions.microsoft.dependencyinjection.nuspec",
+        "icon.png",
+        "lib/netstandard2.1/AutoMapper.Extensions.Microsoft.DependencyInjection.dll"
       ]
     },
     "Humanizer.Core/2.8.26": {
@@ -1515,6 +1580,75 @@
         "version.txt"
       ]
     },
+    "NLog/5.0.4": {
+      "sha512": "hMyC7jq1m7c339DZXTRz96b+0YsIYSwAUB8sAWMtqXd2uwJjYe+y1k74fbItODPqDuE/krd6A4mxew9gLMS+PQ==",
+      "type": "package",
+      "path": "nlog/5.0.4",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "N.png",
+        "lib/net35/NLog.dll",
+        "lib/net35/NLog.xml",
+        "lib/net45/NLog.dll",
+        "lib/net45/NLog.xml",
+        "lib/net46/NLog.dll",
+        "lib/net46/NLog.xml",
+        "lib/netstandard1.3/NLog.dll",
+        "lib/netstandard1.3/NLog.xml",
+        "lib/netstandard1.5/NLog.dll",
+        "lib/netstandard1.5/NLog.xml",
+        "lib/netstandard2.0/NLog.dll",
+        "lib/netstandard2.0/NLog.xml",
+        "nlog.5.0.4.nupkg.sha512",
+        "nlog.nuspec"
+      ]
+    },
+    "NLog.Extensions.Logging/5.0.4": {
+      "sha512": "43f4l7pY5cEjU/m2Xj4kDZhBmwS1xYP1kOzCQiXwv3PWpziGLfF8kA22idk+yRhMfNVExQ/OFnBaoxk6JB3JeA==",
+      "type": "package",
+      "path": "nlog.extensions.logging/5.0.4",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "N.png",
+        "lib/net461/NLog.Extensions.Logging.dll",
+        "lib/net461/NLog.Extensions.Logging.xml",
+        "lib/net5.0/NLog.Extensions.Logging.dll",
+        "lib/net5.0/NLog.Extensions.Logging.xml",
+        "lib/netcoreapp3.1/NLog.Extensions.Logging.dll",
+        "lib/netcoreapp3.1/NLog.Extensions.Logging.xml",
+        "lib/netstandard1.3/NLog.Extensions.Logging.dll",
+        "lib/netstandard1.3/NLog.Extensions.Logging.xml",
+        "lib/netstandard1.5/NLog.Extensions.Logging.dll",
+        "lib/netstandard1.5/NLog.Extensions.Logging.xml",
+        "lib/netstandard2.0/NLog.Extensions.Logging.dll",
+        "lib/netstandard2.0/NLog.Extensions.Logging.xml",
+        "nlog.extensions.logging.5.0.4.nupkg.sha512",
+        "nlog.extensions.logging.nuspec"
+      ]
+    },
+    "NLog.Web.AspNetCore/5.1.4": {
+      "sha512": "LxKgX/vvjk8dHe5EcHTrSBrgu5G+I8KLtU2if9x83CEK2bwFNvb5oudtH/ZtjzLALFM8uN/URHznBMocQi30Ng==",
+      "type": "package",
+      "path": "nlog.web.aspnetcore/5.1.4",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "N.png",
+        "lib/net461/NLog.Web.AspNetCore.dll",
+        "lib/net461/NLog.Web.AspNetCore.xml",
+        "lib/net5.0/NLog.Web.AspNetCore.dll",
+        "lib/net5.0/NLog.Web.AspNetCore.xml",
+        "lib/netcoreapp3.1/NLog.Web.AspNetCore.dll",
+        "lib/netcoreapp3.1/NLog.Web.AspNetCore.xml",
+        "lib/netstandard2.0/NLog.Web.AspNetCore.dll",
+        "lib/netstandard2.0/NLog.Web.AspNetCore.xml",
+        "nlog.web.aspnetcore.5.1.4.nupkg.sha512",
+        "nlog.web.aspnetcore.nuspec",
+        "readme.txt"
+      ]
+    },
     "Swashbuckle.AspNetCore/6.2.3": {
       "sha512": "cnzQDn0Le+hInsw2SYwlOhOCPXpYi/szcvnyqZJ12v+QyrLBwAmWXBg6RIyHB18s/mLeywC+Rg2O9ndz0IUNYQ==",
       "type": "package",
@@ -2083,10 +2217,12 @@
   },
   "projectFileDependencyGroups": {
     "net6.0": [
-      "AutoMapper >= 11.0.1",
+      "AutoMapper >= 12.0.0",
+      "AutoMapper.Extensions.Microsoft.DependencyInjection >= 12.0.0",
       "Microsoft.EntityFrameworkCore >= 6.0.9",
       "Microsoft.EntityFrameworkCore.SqlServer >= 6.0.9",
       "Microsoft.EntityFrameworkCore.Tools >= 6.0.9",
+      "NLog.Web.AspNetCore >= 5.1.4",
       "Swashbuckle.AspNetCore >= 6.2.3"
     ]
   },
@@ -2131,7 +2267,11 @@
         "dependencies": {
           "AutoMapper": {
             "target": "Package",
-            "version": "[11.0.1, )"
+            "version": "[12.0.0, )"
+          },
+          "AutoMapper.Extensions.Microsoft.DependencyInjection": {
+            "target": "Package",
+            "version": "[12.0.0, )"
           },
           "Microsoft.EntityFrameworkCore": {
             "target": "Package",
@@ -2146,6 +2286,10 @@
             "suppressParent": "All",
             "target": "Package",
             "version": "[6.0.9, )"
+          },
+          "NLog.Web.AspNetCore": {
+            "target": "Package",
+            "version": "[5.1.4, )"
           },
           "Swashbuckle.AspNetCore": {
             "target": "Package",

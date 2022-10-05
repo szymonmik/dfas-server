@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using server.Entities;
+using server.Services;
 
 namespace server.Controllers;
 
@@ -7,18 +8,18 @@ namespace server.Controllers;
 [ApiController]
 public class ProductController : ControllerBase
 {
-    private readonly AppDbContext _dbContext;
+    private readonly IProductService _productService;
 
-    public ProductController(AppDbContext dbContext)
+    public ProductController(IProductService productService)
     {
-        _dbContext = dbContext;
+        _productService = productService;
     }
     
     // GET ALL
     [HttpGet]
     public ActionResult<IEnumerable<Product>> GetAll()
     {
-        var products = _dbContext.Products.ToList();
+        var products = _productService.GetAll();
         
         return Ok(products);
     }
@@ -27,13 +28,8 @@ public class ProductController : ControllerBase
     [HttpGet("{id}")]
     public ActionResult<Product> GetById([FromRoute]int id)
     {
-        var product = _dbContext.Products.FirstOrDefault(p => p.Id == id);
+        var product = _productService.GetById(id);
 
-        if (product is null)
-        {
-            NotFound();
-        }
-        
         return Ok(product);
     }
 }
