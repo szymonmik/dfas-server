@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using server.Models;
+using server.Services;
 
 namespace server.Controllers;
 
@@ -6,10 +8,26 @@ namespace server.Controllers;
 [Route("api/user/")]
 public class UserController : ControllerBase
 {
-    // POST - Register User
-    [HttpPost]
-    public ActionResult Register()
+    private IUserService _userService;
+
+    public UserController(IUserService userService)
     {
-        throw new NotImplementedException();
+        _userService = userService;
+    }
+    
+    [HttpPost("register")]
+    public ActionResult Register([FromBody]RegisterUserDto dto)
+    {
+        _userService.RegisterUser(dto);
+
+        return Ok();
+    }
+    
+    [HttpPost("login")]
+    public ActionResult Login([FromBody]LoginDto dto)
+    {
+        string token = _userService.GenerateJwt(dto);
+
+        return Ok(token);
     }
 }
