@@ -15,6 +15,7 @@ public class UserController : ControllerBase
         _userService = userService;
     }
     
+    // /api/user/register
     [HttpPost("register")]
     public ActionResult Register([FromBody]RegisterUserDto dto)
     {
@@ -23,6 +24,7 @@ public class UserController : ControllerBase
         return Ok();
     }
     
+    // /api/user/login
     [HttpPost("login")]
     public ActionResult Login([FromBody]LoginDto dto)
     {
