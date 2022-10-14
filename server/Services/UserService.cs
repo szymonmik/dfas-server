@@ -34,7 +34,7 @@ public class UserService : IUserService
 			Email = dto.Email,
 			BirthDate = dto.BirthDate,
 			RoleId = dto.RoleId,
-			VoivodeshipId = dto.VoivodeshipId
+			RegionId = dto.RegionId
 		};
 
 		var hashedPassword = _passwordHasher.HashPassword(newUser, dto.Password);
@@ -81,5 +81,21 @@ public class UserService : IUserService
 
 		var tokenHandler = new JwtSecurityTokenHandler();
 		return tokenHandler.WriteToken(token);
+	}
+
+	public void UpdateUser(int id, UpdateUserDto dto)
+	{
+		var user = _context.Users.FirstOrDefault(u => u.Id == id);
+
+		if (user is null)
+		{
+			throw new NotFoundException("User not found");
+		}
+
+		user.Name = dto.Name;
+		user.Sex = dto.Sex;
+		user.RegionId = dto.RegionId;
+
+		_context.SaveChanges();
 	}
 }

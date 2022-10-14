@@ -32,4 +32,13 @@ public class UserController : ControllerBase
 
         return Ok(token);
     }
+    
+    // /api/user/update
+    [HttpPost("{id}/update")]
+    public ActionResult Update([FromRoute]int id, [FromBody]UpdateUserDto dto)
+    {
+        _userService.UpdateUser(id, dto);
+
+        return NoContent();
+    }
 }

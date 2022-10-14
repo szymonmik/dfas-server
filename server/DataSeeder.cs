@@ -15,10 +15,10 @@ public class DataSeeder
 	{
 		if (_dbContext.Database.CanConnect())
 		{
-			if (!_dbContext.Voivodeships.Any())
+			if (!_dbContext.Regions.Any())
 			{
-				var voivodeships = GetVoivodeships();
-				_dbContext.Voivodeships.AddRange(voivodeships);
+				var regions = GetRegions();
+				_dbContext.Regions.AddRange(regions);
 				_dbContext.SaveChanges();
 			}
 			if (!_dbContext.Roles.Any())
@@ -44,75 +44,26 @@ public class DataSeeder
 		}
 	}
 
-	private IEnumerable<Voivodeship> GetVoivodeships()
+	private IEnumerable<Region> GetRegions()
 	{
-		var voivodeships = new List<Voivodeship>()
+		var voivodeships = new List<Region>()
 		{
-			new Voivodeship()
+			new Region()
 			{
-				Name = "Dolnośląskie"
+				Name = "Region 1"
 			},
-			new Voivodeship()
+			new Region()
 			{
-				Name = "Kujawsko-Pomorskie"
+				Name = "Region 2"
 			},
-			new Voivodeship()
+			new Region()
 			{
-				Name = "Lubelskie"
+				Name = "Region 3"
 			},
-			new Voivodeship()
+			new Region()
 			{
-				Name = "Lubuskie"
-			},
-			new Voivodeship()
-			{
-				Name = "Łódzkie"
-			},
-			new Voivodeship()
-			{
-				Name = "Małopolskie"
-			},
-			new Voivodeship()
-			{
-				Name = "Mazowieckie"
-			},
-			new Voivodeship()
-			{
-				Name = "Opolskie"
-			},
-			new Voivodeship()
-			{
-				Name = "Podkarpackie"
-			},
-			new Voivodeship()
-			{
-				Name = "Podlaskie"
-			},
-			new Voivodeship()
-			{
-				Name = "Pomorskie"
-			},
-			new Voivodeship()
-			{
-				Name = "Śląskie"
-			},
-			new Voivodeship()
-			{
-				Name = "Świętokrzyskie"
-			},
-			new Voivodeship()
-			{
-				Name = "Warmińsko-Mazurskie"
-			},
-			new Voivodeship()
-			{
-				Name = "Wielkopolskie"
-			},
-			new Voivodeship()
-			{
-				Name = "Zachodniopomorskie"
-			},
-			
+				Name = "Region 4"
+			}
 		};
 
 		return voivodeships;

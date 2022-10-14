@@ -14,7 +14,7 @@ public class AppDbContext : DbContext
 	
 	public DbSet<User> Users { get; set; }
 	public DbSet<Role> Roles { get; set; }
-	public DbSet<Voivodeship> Voivodeships { get; set; }
+	public DbSet<Region> Regions { get; set; }
 
 	protected override void OnModelCreating(ModelBuilder modelBuilder)
 	{

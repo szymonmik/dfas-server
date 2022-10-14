@@ -15,6 +15,8 @@ public class RegisterUserDtoValidator : AbstractValidator<RegisterUserDto>
 			.MinimumLength(6);
 
 		RuleFor(x => x.ConfirmPassword).Equal(e => e.Password);
+		
+		RuleFor(x => x.BirthDate).LessThan(e => DateTime.Now);
 
 		RuleFor(x => x.Email)
 			.Custom((value, context) =>
