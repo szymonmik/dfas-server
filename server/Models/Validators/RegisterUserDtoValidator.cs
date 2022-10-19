@@ -12,7 +12,7 @@ public class RegisterUserDtoValidator : AbstractValidator<RegisterUserDto>
 			.EmailAddress();
 
 		RuleFor(x => x.Password)
-			.MinimumLength(6);
+			.MinimumLength(8);
 
 		RuleFor(x => x.ConfirmPassword).Equal(e => e.Password);
 		

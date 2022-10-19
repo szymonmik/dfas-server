@@ -8,5 +8,5 @@ public class RegisterUserDto
 	public string ConfirmPassword { get; set; }
 	public DateTime? BirthDate { get; set; }
 	public int RoleId { get; set; } = 1;
-	public int RegionId { get; set; }
+	public int RegionId { get; set; } = 1;
 }

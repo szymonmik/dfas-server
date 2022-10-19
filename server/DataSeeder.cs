@@ -1,4 +1,5 @@
-﻿using server.Entities;
+﻿using Microsoft.EntityFrameworkCore;
+using server.Entities;
 
 namespace server;
 
@@ -15,6 +16,13 @@ public class DataSeeder
 	{
 		if (_dbContext.Database.CanConnect())
 		{
+
+			var pendingMigrations = _dbContext.Database.GetPendingMigrations();
+			if(pendingMigrations != null && pendingMigrations.Any())
+            {
+				_dbContext.Database.Migrate();
+            }
+
 			if (!_dbContext.Regions.Any())
 			{
 				var regions = GetRegions();
@@ -46,7 +54,7 @@ public class DataSeeder
 
 	private IEnumerable<Region> GetRegions()
 	{
-		var voivodeships = new List<Region>()
+		var regions = new List<Region>()
 		{
 			new Region()
 			{
@@ -66,7 +74,7 @@ public class DataSeeder
 			}
 		};
 
-		return voivodeships;
+		return regions;
 	}
 	private IEnumerable<Role> GetRoles()
 	{

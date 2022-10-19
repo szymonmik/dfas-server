@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using server.Models;
 using server.Services;
 
@@ -24,8 +25,8 @@ public class UserController : ControllerBase
         return Ok();
     }
     
-    // /api/user/login
-    [HttpPost("login")]
+    // /api/user/authenticate
+    [HttpPost("authenticate")]
     public ActionResult Login([FromBody]LoginDto dto)
     {
         string token = _userService.GenerateJwt(dto);
@@ -33,11 +34,32 @@ public class UserController : ControllerBase
         return Ok(token);
     }
     
-    // /api/user/update
-    [HttpPost("{id}/update")]
-    public ActionResult Update([FromRoute]int id, [FromBody]UpdateUserDto dto)
+    // /api/user/{id}/update/region
+    [HttpPost("{id}/update/region")]
+    [Authorize]
+    public ActionResult UpdateRegion([FromRoute]int id, [FromBody]UpdateUserRegionDto dto)
     {
-        _userService.UpdateUser(id, dto);
+        _userService.UpdateUserRegion(id, dto, User);
+
+        return NoContent();
+    }
+
+    // /api/user/{id}/update/name
+    [HttpPost("{id}/update/name")]
+    [Authorize]
+    public ActionResult UpdateName([FromRoute] int id, [FromBody] UpdateUserNameDto dto)
+    {
+        _userService.UpdateUserName(id, dto, User);
+
+        return NoContent();
+    }
+
+    // /api/user/{id}/update/sex
+    [HttpPost("{id}/update/sex")]
+    [Authorize]
+    public ActionResult UpdateSex([FromRoute] int id, [FromBody] UpdateUserSexDto dto)
+    {
+        _userService.UpdateUserSex(id, dto, User);
 
         return NoContent();
     }

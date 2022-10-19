@@ -2,9 +2,11 @@
 using System.Security.Claims;
 using System.Text;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using server.Authorization;
 using server.Entities;
 using server.Exceptions;
 using server.Models;
@@ -17,13 +19,15 @@ public class UserService : IUserService
 	private readonly IPasswordHasher<User> _passwordHasher;
 	private readonly AuthenticationSettings _authenticationSettings;
 	private readonly IMapper _mapper;
+	private readonly IAuthorizationService _authorizationService;
 
-	public UserService(AppDbContext context, IPasswordHasher<User> passwordHasher, AuthenticationSettings authenticationSettings, IMapper mapper)
+	public UserService(AppDbContext context, IPasswordHasher<User> passwordHasher, AuthenticationSettings authenticationSettings, IMapper mapper, IAuthorizationService authorizationService)
 	{
 		_context = context;
 		_passwordHasher = passwordHasher;
 		_authenticationSettings = authenticationSettings;
 		_mapper = mapper;
+		_authorizationService = authorizationService;
 	}
 	
 	public void RegisterUser(RegisterUserDto dto)
@@ -82,8 +86,29 @@ public class UserService : IUserService
 		var tokenHandler = new JwtSecurityTokenHandler();
 		return tokenHandler.WriteToken(token);
 	}
+	
+	public void UpdateUserRegion(int id, UpdateUserRegionDto dto, ClaimsPrincipal userPrincipal)
+	{
+		var user = _context.Users.FirstOrDefault(u => u.Id == id);
 
-	public void UpdateUser(int id, UpdateUserDto dto)
+		if (user is null)
+		{
+			throw new NotFoundException("User not found");
+		}
+		
+		var authorizationResult = _authorizationService.AuthorizeAsync(userPrincipal, user, new ResourceOperationRequirement(ResourceOperation.Update)).Result;
+
+		if (!authorizationResult.Succeeded)
+		{
+			throw new ForbidException("Forbidden");
+		}
+
+		user.RegionId = dto.RegionId;
+
+		_context.SaveChanges();
+	}
+
+	public void UpdateUserName(int id, UpdateUserNameDto dto, ClaimsPrincipal userPrincipal)
 	{
 		var user = _context.Users.FirstOrDefault(u => u.Id == id);
 
@@ -93,8 +118,20 @@ public class UserService : IUserService
 		}
 
 		user.Name = dto.Name;
+
+		_context.SaveChanges();
+	}
+
+	public void UpdateUserSex(int id, UpdateUserSexDto dto, ClaimsPrincipal userPrincipal)
+	{
+		var user = _context.Users.FirstOrDefault(u => u.Id == id);
+
+		if (user is null)
+		{
+			throw new NotFoundException("User not found");
+		}
+
 		user.Sex = dto.Sex;
-		user.RegionId = dto.RegionId;
 
 		_context.SaveChanges();
 	}

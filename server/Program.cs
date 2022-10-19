@@ -2,10 +2,13 @@ using System.Reflection;
 using System.Text;
 using FluentValidation;
 using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using NLog.Web;
 using server;
+using server.Authorization;
 using server.Entities;
 using server.Middleware;
 using server.Models;
@@ -13,10 +16,21 @@ using server.Models.Validators;
 using server.Services;
 
 
-
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(
+        policy  =>
+        {
+            policy
+                .AllowAnyHeader()
+                .AllowAnyHeader()
+                .AllowAnyOrigin();
+        });
+});
 
 // Authentication snippet
 
@@ -41,11 +55,15 @@ builder.Services.AddAuthentication(option =>
     };
 });
 
+builder.Services.AddAuthorization();
+builder.Services.AddScoped<IAuthorizationHandler, ResourceOperationRequirementHandler>();
+
 builder.Services.AddControllers();
 
-// own
+// my
+builder.Services.AddLogging();
 builder.Services.AddFluentValidationAutoValidation().AddFluentValidationClientsideAdapters();
-builder.Services.AddDbContext<AppDbContext>();
+builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("AppDbConnection")));
 builder.Services.AddScoped<DataSeeder>();
 builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
 builder.Services.AddScoped<IProductService, ProductService>();
@@ -71,18 +89,36 @@ var seeder = scope.ServiceProvider.GetRequiredService<DataSeeder>();
 seeder.Seed();
 
 // Configure the HTTP request pipeline.
-app.UseMiddleware<ErrorHandlingMiddleware>();
+
 
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    
 }
 
+
+app.UseMiddleware<ErrorHandlingMiddleware>();
+
+//app.UseDeveloperExceptionPage();
+
+app.UseAuthentication();
+
+
+app.UseSwagger();
+app.UseSwaggerUI();
+
 app.UseHttpsRedirection();
+
+app.UseCors();
 
 app.UseAuthorization();
 
 app.MapControllers();
+
+/*
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapControllers(); 
+});*/
 
 app.Run();

@@ -4,8 +4,13 @@ namespace server.Entities;
 
 public class AppDbContext : DbContext
 {
-	//Server=localhost\SQLEXPRESS;Database=master;Trusted_Connection=True;
-	private readonly string _connectionString = "Server=localhost\\SQLEXPRESS;Database=AllergyDiaryDb;Trusted_Connection=True;";
+    //Server=localhost\SQLEXPRESS;Database=master;Trusted_Connection=True;
+    //private readonly string _connectionString = "Server=localhost\\SQLEXPRESS;Database=AllergyDiaryDb;Trusted_Connection=True;";
+
+    public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
+    {
+
+    }
 
 	public DbSet<Product> Products { get; set; }
 	
@@ -39,8 +44,8 @@ public class AppDbContext : DbContext
 			.IsRequired();
 	}
 
-	protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) 
+	/*protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) 
 	{
-		optionsBuilder.UseSqlServer(_connectionString); // change to postgresql later
-	}
+		optionsBuilder.UseSqlServer(); // change to postgresql later
+	}*/
 }
