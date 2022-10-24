@@ -37,6 +37,7 @@ public class UserService : IUserService
 			Name = dto.Name,
 			Email = dto.Email,
 			BirthDate = dto.BirthDate,
+			Sex = dto.Sex,
 			RoleId = dto.RoleId,
 			RegionId = dto.RegionId
 		};
@@ -48,10 +49,11 @@ public class UserService : IUserService
 		_context.SaveChanges();
 	}
 
-	public string GenerateJwt(LoginDto dto)
+	public AuthenticationResponse GenerateJwt(LoginDto dto)
 	{
 		var user = _context.Users
 			.Include(u => u.Role)
+			.Include(u => u.Region)
 			.FirstOrDefault(u => u.Email == dto.Email);
 
 		if(user is null)
@@ -84,9 +86,33 @@ public class UserService : IUserService
 			signingCredentials: cred);
 
 		var tokenHandler = new JwtSecurityTokenHandler();
-		return tokenHandler.WriteToken(token);
+		var tokenString = tokenHandler.WriteToken(token);
+		AuthenticationResponse authenticationResponse = new AuthenticationResponse(user, tokenString);
+		return authenticationResponse;
 	}
-	
+
+	public User GetUser(int id, ClaimsPrincipal userPrincipal)
+    {
+		var user = _context.Users
+			.Include(u => u.Role)
+			.Include(u => u.Region)
+			.FirstOrDefault(u => u.Id == id);
+
+		if (user is null)
+		{
+			throw new NotFoundException("User not found");
+		}
+
+		var authorizationResult = _authorizationService.AuthorizeAsync(userPrincipal, user, new ResourceOperationRequirement(ResourceOperation.Update)).Result;
+
+		if (!authorizationResult.Succeeded)
+		{
+			throw new ForbidException("Forbidden for this user");
+		}
+
+		return user;
+	}
+
 	public void UpdateUserRegion(int id, UpdateUserRegionDto dto, ClaimsPrincipal userPrincipal)
 	{
 		var user = _context.Users.FirstOrDefault(u => u.Id == id);
@@ -100,7 +126,7 @@ public class UserService : IUserService
 
 		if (!authorizationResult.Succeeded)
 		{
-			throw new ForbidException("Forbidden");
+			throw new ForbidException("Forbidden for this user");
 		}
 
 		user.RegionId = dto.RegionId;
@@ -117,6 +143,13 @@ public class UserService : IUserService
 			throw new NotFoundException("User not found");
 		}
 
+		var authorizationResult = _authorizationService.AuthorizeAsync(userPrincipal, user, new ResourceOperationRequirement(ResourceOperation.Update)).Result;
+
+		if (!authorizationResult.Succeeded)
+		{
+			throw new ForbidException("Forbidden for this user");
+		}
+
 		user.Name = dto.Name;
 
 		_context.SaveChanges();
@@ -131,7 +164,63 @@ public class UserService : IUserService
 			throw new NotFoundException("User not found");
 		}
 
-		user.Sex = dto.Sex;
+		var authorizationResult = _authorizationService.AuthorizeAsync(userPrincipal, user, new ResourceOperationRequirement(ResourceOperation.Update)).Result;
+
+		if (!authorizationResult.Succeeded)
+		{
+			throw new ForbidException("Forbidden for this user");
+		}
+
+		if (dto.Sex == 'k' || dto.Sex == 'm') user.Sex = dto.Sex;
+
+		_context.SaveChanges();
+	}
+
+	public void UpdateUser(int id, UpdateUserDto dto, ClaimsPrincipal userPrincipal)
+	{
+		var user = _context.Users.FirstOrDefault(u => u.Id == id);
+
+		if (user is null)
+		{
+			throw new NotFoundException("User not found");
+		}
+
+		var authorizationResult = _authorizationService.AuthorizeAsync(userPrincipal, user, new ResourceOperationRequirement(ResourceOperation.Update)).Result;
+
+		if (!authorizationResult.Succeeded)
+		{
+			throw new ForbidException("Forbidden for this user");
+		}
+
+		if(dto.Sex == 'k' || dto.Sex == 'm')user.Sex = dto.Sex;
+		if(dto.Name != null && dto.Name != "") user.Name = dto.Name;
+		if(dto.RegionId >= 1 && dto.RegionId <= 4) user.RegionId = dto.RegionId;
+		
+
+		_context.SaveChanges();
+	}
+	
+	public void UpdateUserPassword(int id, UpdateUserPasswordDto dto, ClaimsPrincipal userPrincipal)
+	{
+		var user = _context.Users.FirstOrDefault(u => u.Id == id);
+
+		if (user is null)
+		{
+			throw new NotFoundException("User not found");
+		}
+
+		var authorizationResult = _authorizationService.AuthorizeAsync(userPrincipal, user, new ResourceOperationRequirement(ResourceOperation.Update)).Result;
+
+		if (!authorizationResult.Succeeded)
+		{
+			throw new ForbidException("Forbidden for this user");
+		}
+		
+		
+
+		var newHashedPassword = _passwordHasher.HashPassword(user, dto.Password);
+		user.PasswordHash = newHashedPassword;
+
 
 		_context.SaveChanges();
 	}

@@ -28,6 +28,7 @@ C:\Users\Szy\RiderProjects\dfas-server\server\obj\Release\net6.0\PubTmp\Out\Micr
 C:\Users\Szy\RiderProjects\dfas-server\server\obj\Release\net6.0\PubTmp\Out\Microsoft.IdentityModel.Tokens.dll
 C:\Users\Szy\RiderProjects\dfas-server\server\obj\Release\net6.0\PubTmp\Out\Microsoft.OpenApi.dll
 C:\Users\Szy\RiderProjects\dfas-server\server\obj\Release\net6.0\PubTmp\Out\Microsoft.Win32.SystemEvents.dll
+C:\Users\Szy\RiderProjects\dfas-server\server\obj\Release\net6.0\PubTmp\Out\Newtonsoft.Json.dll
 C:\Users\Szy\RiderProjects\dfas-server\server\obj\Release\net6.0\PubTmp\Out\NLog.dll
 C:\Users\Szy\RiderProjects\dfas-server\server\obj\Release\net6.0\PubTmp\Out\NLog.Extensions.Logging.dll
 C:\Users\Szy\RiderProjects\dfas-server\server\obj\Release\net6.0\PubTmp\Out\NLog.Web.AspNetCore.dll

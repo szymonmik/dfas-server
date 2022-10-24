@@ -1,6 +1,4 @@
-﻿using server.Entities;
-
-namespace server.Models;
+﻿namespace server.Models;
 
 public class UpdateUserRegionDto
 {

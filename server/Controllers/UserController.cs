@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using server.Entities;
 using server.Models;
 using server.Services;
 
@@ -27,11 +28,21 @@ public class UserController : ControllerBase
     
     // /api/user/authenticate
     [HttpPost("authenticate")]
-    public ActionResult Login([FromBody]LoginDto dto)
+    [Produces("application/json")]
+    public ActionResult Authenticate([FromBody]LoginDto dto)
     {
-        string token = _userService.GenerateJwt(dto);
+        AuthenticationResponse authenticationResponse;
+        authenticationResponse = _userService.GenerateJwt(dto);
 
-        return Ok(token);
+        return Ok(authenticationResponse);
+    }
+
+    [HttpGet("{id}")]
+    [Authorize]
+    public ActionResult GetUser([FromRoute]int id)
+    {
+        var user = _userService.GetUser(id, User);
+        return Ok(user);
     }
     
     // /api/user/{id}/update/region
@@ -60,6 +71,26 @@ public class UserController : ControllerBase
     public ActionResult UpdateSex([FromRoute] int id, [FromBody] UpdateUserSexDto dto)
     {
         _userService.UpdateUserSex(id, dto, User);
+
+        return NoContent();
+    }
+
+    // /api/user/{id}/update
+    [HttpPost("{id}/update")]
+    [Authorize]
+    public ActionResult Update([FromRoute] int id, [FromBody] UpdateUserDto dto)
+    {
+        _userService.UpdateUser(id, dto, User);
+
+        return NoContent();
+    }
+    
+    // /api/user/{id}/update/password
+    [HttpPost("{id}/update/password")]
+    [Authorize]
+    public ActionResult Update([FromRoute] int id, [FromBody] UpdateUserPasswordDto dto)
+    {
+        _userService.UpdateUserPassword(id, dto, User);
 
         return NoContent();
     }

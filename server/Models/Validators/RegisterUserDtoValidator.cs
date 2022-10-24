@@ -12,9 +12,10 @@ public class RegisterUserDtoValidator : AbstractValidator<RegisterUserDto>
 			.EmailAddress();
 
 		RuleFor(x => x.Password)
-			.MinimumLength(8);
+			.MinimumLength(8)
+			.WithMessage("Hasło za krótkie.");
 
-		RuleFor(x => x.ConfirmPassword).Equal(e => e.Password);
+		RuleFor(x => x.ConfirmPassword).Equal(e => e.Password).WithMessage("Hasła nie są zgodne.");
 		
 		RuleFor(x => x.BirthDate).LessThan(e => DateTime.Now);
 
@@ -24,7 +25,7 @@ public class RegisterUserDtoValidator : AbstractValidator<RegisterUserDto>
 				var emailInUse = dbContext.Users.Any(u => u.Email == value);
 				if (emailInUse)
 				{
-					context.AddFailure("Email", "That email is taken");
+					context.AddFailure("Email", "Email jest zajęty.");
 				}
 			});
 	}

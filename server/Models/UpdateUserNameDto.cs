@@ -1,7 +1,7 @@
-﻿namespace server.Models
+﻿namespace server.Models;
+
+public class UpdateUserNameDto
 {
-    public class UpdateUserNameDto
-    {
-        public string Name { get; set; }
-    }
+    public string Name { get; set; }
 }
+

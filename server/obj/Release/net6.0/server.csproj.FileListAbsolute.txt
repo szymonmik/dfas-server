@@ -72,3 +72,4 @@ C:\Users\Szy\RiderProjects\dfas-server\server\obj\Release\net6.0\refint\server.d
 C:\Users\Szy\RiderProjects\dfas-server\server\obj\Release\net6.0\server.pdb
 C:\Users\Szy\RiderProjects\dfas-server\server\obj\Release\net6.0\server.genruntimeconfig.cache
 C:\Users\Szy\RiderProjects\dfas-server\server\obj\Release\net6.0\ref\server.dll
+C:\Users\Szy\RiderProjects\dfas-server\server\bin\Release\net6.0\Newtonsoft.Json.dll
