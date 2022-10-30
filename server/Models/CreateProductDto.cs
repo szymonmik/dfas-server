@@ -3,5 +3,5 @@
 public class CreateProductDto
 {
 	public string Name { get; set; }
-	public int AllergenId { get; set; }
+	//public int AllergenId { get; set; }
 }

@@ -1,5 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using server.Entities;
+using server.Models;
 using server.Services;
 
 namespace server.Controllers;
@@ -17,19 +20,34 @@ public class ProductController : ControllerBase
     
     // GET ALL
     [HttpGet]
+    [Authorize]
     public ActionResult<IEnumerable<Product>> GetAll()
     {
-        var products = _productService.GetAll();
+        var userId = int.Parse(User.FindFirst(c => c.Type == ClaimTypes.NameIdentifier).Value);
+        var products = _productService.GetAll(userId);
         
         return Ok(products);
     }
     
     // GET BY ID
-    [HttpGet("{id}")]
-    public ActionResult<Product> GetById([FromRoute]int id)
+    [HttpGet("{productId}")]
+    [Authorize]
+    public ActionResult<Product> GetById([FromRoute]int productId)
     {
-        var product = _productService.GetById(id);
+        var userId = int.Parse(User.FindFirst(c => c.Type == ClaimTypes.NameIdentifier).Value);
+        var product = _productService.GetById(userId, productId, User);
 
         return Ok(product);
+    }
+    
+    // CREATE
+    [HttpPost("create")]
+    [Authorize]
+    public ActionResult Create([FromBody] CreateProductDto dto)
+    {
+        var userId = int.Parse(User.FindFirst(c => c.Type == ClaimTypes.NameIdentifier).Value);
+        var id = _productService.CreateProduct(userId, dto);
+
+        return Created($"/api/product/{id}", null);
     }
 }

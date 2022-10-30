@@ -193,10 +193,9 @@ public class UserService : IUserService
 		}
 
 		if(dto.Sex == 'k' || dto.Sex == 'm')user.Sex = dto.Sex;
-		if(dto.Name != null && dto.Name != "") user.Name = dto.Name;
+		if(!string.IsNullOrEmpty(dto.Name)) user.Name = dto.Name;
 		if(dto.RegionId >= 1 && dto.RegionId <= 4) user.RegionId = dto.RegionId;
 		
-
 		_context.SaveChanges();
 	}
 	
@@ -216,11 +215,8 @@ public class UserService : IUserService
 			throw new ForbidException("Forbidden for this user");
 		}
 		
-		
-
 		var newHashedPassword = _passwordHasher.HashPassword(user, dto.Password);
 		user.PasswordHash = newHashedPassword;
-
 
 		_context.SaveChanges();
 	}

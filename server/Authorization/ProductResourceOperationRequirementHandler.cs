@@ -4,9 +4,9 @@ using server.Entities;
 
 namespace server.Authorization;
 
-public class ResourceOperationRequirementHandler : AuthorizationHandler<ResourceOperationRequirement, User>
+public class ProductResourceOperationRequirementHandler : AuthorizationHandler<ResourceOperationRequirement, Product>
 {
-	protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, ResourceOperationRequirement requirement, User user)
+	protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, ResourceOperationRequirement requirement, Product product)
 	{
 		/*
 		if(requirement.ResourceOperation == ResourceOperation.Read || requirement.ResourceOperation == ResourceOperation.Create)
@@ -16,7 +16,7 @@ public class ResourceOperationRequirementHandler : AuthorizationHandler<Resource
 
 		var userId = context.User.FindFirst(c => c.Type == ClaimTypes.NameIdentifier).Value;
 
-		if(user.Id == int.Parse(userId))
+		if (product.UserId == int.Parse(userId) || product.UserId is null)
 		{
 			context.Succeed(requirement);
 		}

@@ -49,6 +49,13 @@ public class DataSeeder
 				_dbContext.Allergens.AddRange(allergens);
 				_dbContext.SaveChanges();
 			}
+			
+			if (!_dbContext.Products.Any())
+			{
+				var products = GetProducts();
+				_dbContext.Products.AddRange(products);
+				_dbContext.SaveChanges();
+			}
 		}
 	}
 
@@ -232,5 +239,50 @@ public class DataSeeder
 		};
 
 		return allergens;
+	}
+	
+	private IEnumerable<Product> GetProducts()
+	{
+		var products = new List<Product>()
+		{
+			new Product()
+			{
+				Name = "Bułka pszenna"
+			},
+			new Product()
+			{
+				Name = "Jajko"
+			},
+			new Product()
+			{
+				Name = "Ryż biały"
+			},
+			new Product()
+			{
+				Name = "Ryż brązowy"
+			},
+			new Product()
+			{
+				Name = "Ryż basmati"
+			},
+			new Product()
+			{
+				Name = "Makaron pszenny"
+			},
+			new Product()
+			{
+				Name = "Makaron pełnoziarnisty"
+			},
+			new Product()
+			{
+				Name = "Masło"
+			},
+			new Product()
+			{
+				Name = "Mleko"
+			}
+		};
+
+		return products;
 	}
 }

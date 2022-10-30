@@ -57,6 +57,7 @@ builder.Services.AddAuthentication(option =>
 
 builder.Services.AddAuthorization();
 builder.Services.AddScoped<IAuthorizationHandler, ResourceOperationRequirementHandler>();
+builder.Services.AddScoped<IAuthorizationHandler, ProductResourceOperationRequirementHandler>();
 
 builder.Services.AddControllers();
 
