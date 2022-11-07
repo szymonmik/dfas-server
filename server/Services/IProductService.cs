@@ -6,9 +6,7 @@ namespace server.Services;
 public interface IProductService
 {
 	IEnumerable<ProductDto> GetAll(int id);
-
 	ProductDto GetById(int userId, int productId, ClaimsPrincipal userPrincipal);
-
 	int CreateProduct(int id, CreateProductDto dto);
-
+	void AssignAllergen(int productId, int allergenId, ClaimsPrincipal userPrincipal);
 }

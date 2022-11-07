@@ -1,6 +1,7 @@
 ﻿using System.Security.Claims;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.EntityFrameworkCore;
 using server.Authorization;
 using server.Entities;
 using server.Exceptions;
@@ -30,7 +31,12 @@ public class ProductService : IProductService
 			throw new NotFoundException("User not found");
 		}
 		
-		var products = _dbContext.Products.Where(x => x.UserId == userId || x.UserId == null).ToList();
+		var products = _dbContext.Products
+			.Include(x => x.ProductAllergens)
+			.ThenInclude(x => x.Allergen)
+			.ThenInclude(x => x.AllergenType)
+			.Where(x => x.UserId == userId || x.UserId == null)
+			.ToList();
 
 		var productDtos = _mapper.Map<List<ProductDto>>(products);
 
@@ -39,7 +45,11 @@ public class ProductService : IProductService
 
 	public ProductDto GetById(int userId, int productId, ClaimsPrincipal userPrincipal)
 	{
-		var product = _dbContext.Products.FirstOrDefault(p => p.Id == productId);
+		var product = _dbContext.Products
+			.Include(p => p.ProductAllergens)
+			.ThenInclude(x => x.Allergen)
+			.ThenInclude(x => x.AllergenType)
+			.FirstOrDefault(p => p.Id == productId);
 
 		if (product is null)
 		{
@@ -73,5 +83,41 @@ public class ProductService : IProductService
 		_dbContext.SaveChanges();
 
 		return product.Id;
+	}
+
+	public void AssignAllergen(int productId, int allergenId, ClaimsPrincipal userPrincipal)
+	{
+		var product = _dbContext.Products
+			.Include(p => p.ProductAllergens)
+			.FirstOrDefault(p => p.Id == productId);
+
+		if (product is null)
+		{
+			throw new NotFoundException("Product not found");
+		}
+		
+		var authorizationResult = _authorizationService.AuthorizeAsync(userPrincipal, product, new ResourceOperationRequirement(ResourceOperation.Update)).Result;
+
+		if (!authorizationResult.Succeeded)
+		{
+			throw new ForbidException("Forbidden for this user");
+		}
+
+		ProductHasAllergen assignment = new ProductHasAllergen()
+		{
+			ProductId = productId,
+			AllergenId = allergenId
+		};
+
+		var existingAssignment = _dbContext.ProductHasAllergens.FirstOrDefault(x => x.ProductId == productId && x.AllergenId == allergenId);
+
+		if (existingAssignment != null)
+		{
+			throw new BadRequestException("Already assigned");
+		}
+		
+		_dbContext.ProductHasAllergens.Add(assignment);
+		_dbContext.SaveChanges();
+		
 	}
 }

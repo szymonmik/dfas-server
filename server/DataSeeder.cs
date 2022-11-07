@@ -56,6 +56,13 @@ public class DataSeeder
 				_dbContext.Products.AddRange(products);
 				_dbContext.SaveChanges();
 			}
+			
+			if (!_dbContext.ProductHasAllergens.Any())
+			{
+				var productAllergens = GetProductAllergens();
+				_dbContext.ProductHasAllergens.AddRange(productAllergens);
+				_dbContext.SaveChanges();
+			}
 		}
 	}
 
@@ -121,37 +128,42 @@ public class DataSeeder
 	{
 		var allergens = new List<Allergen>()
 		{
-			new Allergen()
+			new Allergen() // 1
+			{
+				Name = "Gluten",
+				AllergenTypeId = 1
+			},
+			new Allergen() // 2
 			{
 				Name = "Mleko",
 				AllergenTypeId = 1
 			},
-			new Allergen()
+			new Allergen() // 3
 			{
 				Name = "Orzechy",
 				AllergenTypeId = 1
 			},
-			new Allergen()
+			new Allergen() // 4
 			{
 				Name = "Seler",
 				AllergenTypeId = 1
 			},
-			new Allergen()
+			new Allergen() // 5
 			{
 				Name = "Ryby",
 				AllergenTypeId = 1
 			},
-			new Allergen()
+			new Allergen() // 6
 			{
 				Name = "Jaja",
 				AllergenTypeId = 1
 			},
-			new Allergen()
+			new Allergen() // 7
 			{
 				Name = "Łubin",
 				AllergenTypeId = 1
 			},
-			new Allergen()
+			new Allergen() // 8
 			{
 				Name = "Gorczyca",
 				AllergenTypeId = 1
@@ -284,5 +296,60 @@ public class DataSeeder
 		};
 
 		return products;
+	}
+
+	private IEnumerable<ProductHasAllergen> GetProductAllergens()
+	{
+		var productAllergens = new List<ProductHasAllergen>()
+		{
+			new ProductHasAllergen()
+			{
+				ProductId = 1,
+				AllergenId = 1
+			},
+			new ProductHasAllergen()
+			{
+				ProductId = 2,
+				AllergenId = 6
+			},
+			new ProductHasAllergen()
+			{
+				ProductId = 3,
+				AllergenId = 1
+			},
+			new ProductHasAllergen()
+			{
+				ProductId = 6,
+				AllergenId = 1
+			},
+			new ProductHasAllergen()
+			{
+				ProductId = 6,
+				AllergenId = 6
+			},
+			new ProductHasAllergen()
+			{
+				ProductId = 7,
+				AllergenId = 1
+			},
+			new ProductHasAllergen()
+			{
+				ProductId = 7,
+				AllergenId = 6
+			},
+			new ProductHasAllergen()
+			{
+				ProductId = 8,
+				AllergenId = 2
+			},
+			new ProductHasAllergen()
+			{
+				ProductId = 9,
+				AllergenId = 2
+			},
+			
+		};
+
+		return productAllergens;
 	}
 }

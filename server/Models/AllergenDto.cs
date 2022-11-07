@@ -2,10 +2,11 @@
 
 namespace server.Models;
 
-public class ProductDto
+public class AllergenDto
 {
 	public int Id { get; set; }
 	public string Name { get; set; }
-
-	public IEnumerable<AllergenDto> Allergens { get; set; }
+	
+	public int AllergenTypeId { get; set; }
+	public AllergenType AllergenType { get; set; }
 }

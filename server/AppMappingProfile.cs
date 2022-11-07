@@ -6,29 +6,15 @@ namespace server;
 
 public class AppMappingProfile : Profile
 {
-    public AppMappingProfile()
-    {
-        CreateMap<CreateProductDto, Product>();
+	public AppMappingProfile()
+	{
+		CreateMap<CreateProductDto, Product>();
 
-        CreateMap<Product, ProductDto>();
+		CreateMap<Product, ProductDto>()
+			.ForMember(p => p.Allergens, opt => opt.MapFrom(c => c.ProductAllergens.Where(a => a.ProductId == c.Id).Select(a => a.Allergen)));
 
-        CreateMap<CreateAllergenDto, Allergen>();
+		CreateMap<Allergen, AllergenDto>();
 
-        /*CreateMap<Product, ProductDto>()
-            .ForMember(m => m.City, c => c.MapFrom(s => s.Address.City))
-            .ForMember(m => m.Street, c => c.MapFrom(s => s.Address.Street))
-            .ForMember(m => m.PostalCode, c => c.MapFrom(s => s.Address.PostalCode));*/
-
-        /*
-        CreateMap<Dish, DishDto>();
-        */
-
-        /*
-        CreateMap<CreateProductDto, Product>()
-            .ForMember(r => r.Address, c => c.MapFrom(dto => new Address()
-            {
-                City = dto.City, PostalCode = dto.PostalCode, Street = dto.Street 
-            }));
-            */
-    }
+		CreateMap<CreateAllergenDto, Allergen>();
+	}
 }

@@ -50,4 +50,15 @@ public class ProductController : ControllerBase
 
         return Created($"/api/product/{id}", null);
     }
+    
+    // ADD ALLERGEN TO PRODUCT
+    [HttpPost("{productId}/assignallergen/{allergenId}")]
+    [Authorize]
+    public ActionResult AssignAllergen([FromRoute] int productId, [FromRoute] int allergenId)
+    {
+        var userId = int.Parse(User.FindFirst(c => c.Type == ClaimTypes.NameIdentifier).Value);
+        _productService.AssignAllergen(productId, allergenId, User);
+
+        return Ok();
+    }
 }

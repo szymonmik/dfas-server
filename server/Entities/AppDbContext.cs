@@ -13,13 +13,14 @@ public class AppDbContext : DbContext
     }
 
 	public DbSet<Product> Products { get; set; }
-	
 	public DbSet<Allergen> Allergens { get; set; }
 	public DbSet<AllergenType> AllergenTypes { get; set; }
-	
+
 	public DbSet<User> Users { get; set; }
 	public DbSet<Role> Roles { get; set; }
 	public DbSet<Region> Regions { get; set; }
+	
+	public DbSet<ProductHasAllergen> ProductHasAllergens { get; set; }
 
 	protected override void OnModelCreating(ModelBuilder modelBuilder)
 	{
@@ -42,6 +43,25 @@ public class AppDbContext : DbContext
 		modelBuilder.Entity<AllergenType>()
 			.Property(u => u.Name)
 			.IsRequired();
+
+		modelBuilder.Entity<ProductHasAllergen>()
+			.HasKey(x => new { x.ProductId, x.AllergenId });
+
+		modelBuilder.Entity<ProductHasAllergen>()
+			.HasOne(x => x.Product)
+			.WithMany(x => x.ProductAllergens)
+			.HasForeignKey(x => x.ProductId);
+
+		modelBuilder.Entity<ProductHasAllergen>()
+			.HasOne(x => x.Allergen)
+			.WithMany()
+			.HasForeignKey(x => x.AllergenId);
+
+		modelBuilder.Entity<Product>()
+			.HasMany(x => x.ProductAllergens)
+			.WithOne(x => x.Product)
+			.HasForeignKey(x => x.ProductId);
+		
 	}
 
 	/*protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) 
