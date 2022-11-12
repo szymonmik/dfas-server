@@ -54,4 +54,5 @@ C:\Users\Szy\RiderProjects\dfas-server\server\obj\Release\net6.0\PubTmp\Out\runt
 C:\Users\Szy\RiderProjects\dfas-server\server\obj\Release\net6.0\PubTmp\Out\runtimes\win\lib\netstandard2.0\System.Runtime.Caching.dll
 C:\Users\Szy\RiderProjects\dfas-server\server\obj\Release\net6.0\PubTmp\Out\runtimes\win\lib\netstandard2.0\System.Security.Cryptography.ProtectedData.dll
 C:\Users\Szy\RiderProjects\dfas-server\server\obj\Release\net6.0\PubTmp\Out\runtimes\win\lib\netcoreapp3.0\System.Windows.Extensions.dll
+C:\Users\Szy\RiderProjects\dfas-server\server\obj\Release\net6.0\PubTmp\Out\server.xml
 C:\Users\Szy\RiderProjects\dfas-server\server\obj\Release\net6.0\PubTmp\Out\server.deps.json

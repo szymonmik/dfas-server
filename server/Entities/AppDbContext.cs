@@ -22,6 +22,8 @@ public class AppDbContext : DbContext
 	
 	public DbSet<ProductHasAllergen> ProductHasAllergens { get; set; }
 
+	public DbSet<Symptom> Symptoms { get; set; }
+
 	protected override void OnModelCreating(ModelBuilder modelBuilder)
 	{
 		modelBuilder.Entity<User>()
@@ -61,7 +63,6 @@ public class AppDbContext : DbContext
 			.HasMany(x => x.ProductAllergens)
 			.WithOne(x => x.Product)
 			.HasForeignKey(x => x.ProductId);
-		
 	}
 
 	/*protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) 

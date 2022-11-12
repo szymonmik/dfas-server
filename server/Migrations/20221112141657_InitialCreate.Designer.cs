@@ -12,7 +12,7 @@ using server.Entities;
 namespace server.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20221010183114_InitialCreate")]
+    [Migration("20221112141657_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -91,6 +91,37 @@ namespace server.Migrations
                     b.ToTable("Products");
                 });
 
+            modelBuilder.Entity("server.Entities.ProductHasAllergen", b =>
+                {
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("AllergenId")
+                        .HasColumnType("int");
+
+                    b.HasKey("ProductId", "AllergenId");
+
+                    b.HasIndex("AllergenId");
+
+                    b.ToTable("ProductHasAllergens");
+                });
+
+            modelBuilder.Entity("server.Entities.Region", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Regions");
+                });
+
             modelBuilder.Entity("server.Entities.Role", b =>
                 {
                     b.Property<int>("Id")
@@ -123,9 +154,6 @@ namespace server.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<float>("Height")
-                        .HasColumnType("real");
-
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
@@ -135,6 +163,9 @@ namespace server.Migrations
                     b.Property<string>("PasswordHash")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("RegionId")
+                        .HasColumnType("int");
+
                     b.Property<int>("RoleId")
                         .HasColumnType("int");
 
@@ -142,35 +173,13 @@ namespace server.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(1)");
 
-                    b.Property<int>("VoivodeshipId")
-                        .HasColumnType("int");
-
-                    b.Property<float>("Weight")
-                        .HasColumnType("real");
-
                     b.HasKey("Id");
+
+                    b.HasIndex("RegionId");
 
                     b.HasIndex("RoleId");
 
-                    b.HasIndex("VoivodeshipId");
-
                     b.ToTable("Users");
-                });
-
-            modelBuilder.Entity("server.Entities.Voivodeship", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Voivodeships");
                 });
 
             modelBuilder.Entity("server.Entities.Allergen", b =>
@@ -193,23 +202,47 @@ namespace server.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("server.Entities.ProductHasAllergen", b =>
+                {
+                    b.HasOne("server.Entities.Allergen", "Allergen")
+                        .WithMany()
+                        .HasForeignKey("AllergenId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("server.Entities.Product", "Product")
+                        .WithMany("ProductAllergens")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Allergen");
+
+                    b.Navigation("Product");
+                });
+
             modelBuilder.Entity("server.Entities.User", b =>
                 {
+                    b.HasOne("server.Entities.Region", "Region")
+                        .WithMany()
+                        .HasForeignKey("RegionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("server.Entities.Role", "Role")
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("server.Entities.Voivodeship", "Voivodeship")
-                        .WithMany()
-                        .HasForeignKey("VoivodeshipId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Navigation("Region");
 
                     b.Navigation("Role");
+                });
 
-                    b.Navigation("Voivodeship");
+            modelBuilder.Entity("server.Entities.Product", b =>
+                {
+                    b.Navigation("ProductAllergens");
                 });
 #pragma warning restore 612, 618
         }

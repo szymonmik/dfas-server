@@ -14,7 +14,9 @@ public class PollinationController : ControllerBase
 		_pollinationService = pollinationService;
 	}
 	
-	// GET
+	/// <summary>
+	/// Not implemented yet
+	/// </summary>
 	[HttpGet]
 	public IActionResult GetToday()
 	{

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using server.Entities;
+using server.Services;
 
 namespace server.Controllers;
 
@@ -7,32 +8,32 @@ namespace server.Controllers;
 [Route("api/region/")]
 public class RegionController : ControllerBase
 {
-    private readonly AppDbContext _dbContext;
+    private readonly IRegionService _regionService;
 
-    public RegionController(AppDbContext dbContext)
+    public RegionController(IRegionService regionService)
     {
-        _dbContext = dbContext;
+        _regionService = regionService;
     }
-    // GET ALL
+
+    /// <summary>
+    /// Gets all regions
+    /// </summary>
     [HttpGet]
     public ActionResult<IEnumerable<Region>> GetAll()
     {
-        var regions = _dbContext.Regions.ToList();
+        var regions = _regionService.GetAll();
 
         return Ok(regions);
     }
     
-    // GET BY ID
+    /// <summary>
+    /// Gets region by id
+    /// </summary>
     [HttpGet("{id}")]
     public ActionResult<Region> GetById([FromRoute]int id)
     {
-        var region = _dbContext.Regions.FirstOrDefault(v => v.Id == id);
+        var region = _regionService.GetById(id);
 
-        if (region is null)
-        {
-            return NotFound();
-        }
-        
         return Ok(region);
     }
 }

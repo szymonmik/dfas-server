@@ -137,6 +137,22 @@ namespace server.Migrations
                     b.ToTable("Roles");
                 });
 
+            modelBuilder.Entity("server.Entities.Symptom", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Symptoms");
+                });
+
             modelBuilder.Entity("server.Entities.User", b =>
                 {
                     b.Property<int>("Id")

@@ -24,7 +24,7 @@ public class ProductResourceOperationRequirementHandler : AuthorizationHandler<R
 			}
 		}
 		
-		if (requirement.ResourceOperation == ResourceOperation.Update)
+		if (requirement.ResourceOperation == ResourceOperation.Update || requirement.ResourceOperation == ResourceOperation.Delete)
 		{
 			var userId = context.User.FindFirst(c => c.Type == ClaimTypes.NameIdentifier).Value;
 
@@ -33,9 +33,7 @@ public class ProductResourceOperationRequirementHandler : AuthorizationHandler<R
 				context.Succeed(requirement);
 			}
 		}
-
 		
-
 		return Task.CompletedTask;
 	}
 }

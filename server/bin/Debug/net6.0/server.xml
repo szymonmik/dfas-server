@@ -1,0 +1,139 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>server</name>
+    </assembly>
+    <members>
+        <member name="M:server.Controllers.AllergenController.GetAllergens">
+            <summary>
+            Gets all allergens
+            </summary>
+        </member>
+        <member name="M:server.Controllers.AllergenController.GetAllergenById(System.Int32)">
+            <summary>
+            Gets allergen by id
+            </summary>
+        </member>
+        <member name="M:server.Controllers.AllergenController.GetAllergenTypes">
+            <summary>
+            Gets all allergen types
+            </summary>
+        </member>
+        <member name="M:server.Controllers.AllergenController.GetAllergenTypeById(System.Int32)">
+            <summary>
+            Gets allergen type by id
+            </summary>
+        </member>
+        <member name="M:server.Controllers.PollinationController.GetToday">
+            <summary>
+            Not implemented yet
+            </summary>
+        </member>
+        <member name="M:server.Controllers.ProductController.GetAll">
+            <summary>
+            Gets all global and own products
+            </summary>
+        </member>
+        <member name="M:server.Controllers.ProductController.GetAllCurrentUser">
+            <summary>
+            Gets all own products
+            </summary>
+        </member>
+        <member name="M:server.Controllers.ProductController.GetById(System.Int32)">
+            <summary>
+            Gets global or own product by id
+            </summary>
+        </member>
+        <member name="M:server.Controllers.ProductController.Create(server.Models.CreateProductDto)">
+            <summary>
+            Assigns allergen to own product
+            </summary>
+        </member>
+        <member name="M:server.Controllers.ProductController.Update(System.Int32,server.Models.UpdateProductDto)">
+            <summary>
+            Updates product
+            </summary>
+            <remarks>Only name so far</remarks>
+        </member>
+        <member name="M:server.Controllers.ProductController.Delete(System.Int32)">
+            <summary>
+            Deletes product and existing allergen assignments
+            </summary>
+        </member>
+        <member name="M:server.Controllers.ProductController.AssignAllergen(System.Int32,System.Int32)">
+            <summary>
+            Assigns allergen to own product
+            </summary>
+        </member>
+        <member name="M:server.Controllers.ProductController.UnssignAllergen(System.Int32,System.Int32)">
+            <summary>
+            Unassigns allergen from own product
+            </summary>
+            <remarks>Only own products</remarks>
+            <response code="204">Unassigned succesfully</response>
+            <response code="401">Unauthorized</response>
+            <response code="400">Product has missing/invalid values</response>
+            <response code="500">Server error</response>
+        </member>
+        <member name="M:server.Controllers.RegionController.GetAll">
+            <summary>
+            Gets all regions
+            </summary>
+        </member>
+        <member name="M:server.Controllers.RegionController.GetById(System.Int32)">
+            <summary>
+            Gets region by id
+            </summary>
+        </member>
+        <member name="M:server.Controllers.SymptomController.GetAll">
+            <summary>
+            Gets all symptoms
+            </summary>
+        </member>
+        <member name="M:server.Controllers.SymptomController.GetById(System.Int32)">
+            <summary>
+            Gets symptom by id
+            </summary>
+        </member>
+        <member name="M:server.Controllers.UserController.Register(server.Models.RegisterUserDto)">
+            <summary>
+            Creates new user account
+            </summary>
+        </member>
+        <member name="M:server.Controllers.UserController.Authenticate(server.Models.LoginDto)">
+            <summary>
+            Returns succesfully authenticated user token
+            </summary>
+        </member>
+        <member name="M:server.Controllers.UserController.GetUser(System.Int32)">
+            <summary>
+            Gets authorized user data
+            </summary>
+        </member>
+        <member name="M:server.Controllers.UserController.UpdateRegion(System.Int32,server.Models.UpdateUserRegionDto)">
+            <summary>
+            Updates authorized user region
+            </summary>
+        </member>
+        <member name="M:server.Controllers.UserController.UpdateName(System.Int32,server.Models.UpdateUserNameDto)">
+            <summary>
+            Updates authorized user name
+            </summary>
+        </member>
+        <member name="M:server.Controllers.UserController.UpdateSex(System.Int32,server.Models.UpdateUserSexDto)">
+            <summary>
+            Updates authorized user sex
+            </summary>
+        </member>
+        <member name="M:server.Controllers.UserController.Update(System.Int32,server.Models.UpdateUserDto)">
+            <summary>
+            Updates authorized user region, name and sex
+            </summary>
+        </member>
+        <member name="M:server.Controllers.UserController.Update(System.Int32,server.Models.UpdateUserPasswordDto)">
+            <summary>
+            Updates authorized user password
+            </summary>
+        </member>
+    </members>
+</doc>

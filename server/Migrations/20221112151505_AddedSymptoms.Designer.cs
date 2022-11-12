@@ -12,8 +12,8 @@ using server.Entities;
 namespace server.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20221107195616_FixProductAllergen")]
-    partial class FixProductAllergen
+    [Migration("20221112151505_AddedSymptoms")]
+    partial class AddedSymptoms
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -137,6 +137,22 @@ namespace server.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Roles");
+                });
+
+            modelBuilder.Entity("server.Entities.Symptom", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Symptoms");
                 });
 
             modelBuilder.Entity("server.Entities.User", b =>

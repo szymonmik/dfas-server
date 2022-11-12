@@ -16,7 +16,9 @@ public class AllergenController : ControllerBase
 		_allergenService = allergenService;
 	}
 	
-	// GET ALL ALLERGENS
+	/// <summary>
+	/// Gets all allergens
+	/// </summary>
 	[HttpGet]
 	public ActionResult<IEnumerable<Allergen>> GetAllergens()
 	{
@@ -25,8 +27,10 @@ public class AllergenController : ControllerBase
 		return Ok(allergens);
 	}
     
-	// GET ALLERGEN BY ID
-	[HttpGet("{id}")]
+	/// <summary>
+	/// Gets allergen by id
+	/// </summary>
+	[HttpGet("{allergenId}")]
 	public ActionResult<Allergen> GetAllergenById([FromRoute]int id)
 	{
 		var allergen = _allergenService.GetAllergenById(id);
@@ -39,7 +43,9 @@ public class AllergenController : ControllerBase
 		return Ok(allergen);
 	}
 	
-	// GET ALL ALLERGEN TYPES
+	/// <summary>
+	/// Gets all allergen types
+	/// </summary>
 	[HttpGet("type")]
 	public ActionResult<IEnumerable<AllergenType>> GetAllergenTypes()
 	{
@@ -48,8 +54,10 @@ public class AllergenController : ControllerBase
 		return Ok(allergenTypes);
 	}
 	
-	// GET ALLERGEN TYPE BY ID
-	[HttpGet("type/{id}")]
+	/// <summary>
+	/// Gets allergen type by id
+	/// </summary>
+	[HttpGet("type/{allergenTypeId}")]
 	public ActionResult<AllergenType> GetAllergenTypeById([FromRoute]int id)
 	{
 		var allergenType = _allergenService.GetAllergenTypeById(id);

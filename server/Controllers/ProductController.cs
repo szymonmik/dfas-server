@@ -18,7 +18,9 @@ public class ProductController : ControllerBase
         _productService = productService;
     }
     
-    // GET ALL
+    /// <summary>
+    /// Gets all global and own products
+    /// </summary>
     [HttpGet]
     [Authorize]
     public ActionResult<IEnumerable<Product>> GetAll()
@@ -29,7 +31,22 @@ public class ProductController : ControllerBase
         return Ok(products);
     }
     
-    // GET BY ID
+    /// <summary>
+    /// Gets all own products
+    /// </summary>
+    [HttpGet("own")]
+    [Authorize]
+    public ActionResult<IEnumerable<Product>> GetAllCurrentUser()
+    {
+        var userId = int.Parse(User.FindFirst(c => c.Type == ClaimTypes.NameIdentifier).Value);
+        var products = _productService.GetAllCurrentUser(userId);
+        
+        return Ok(products);
+    }
+    
+    /// <summary>
+    /// Gets global or own product by id
+    /// </summary>
     [HttpGet("{productId}")]
     [Authorize]
     public ActionResult<Product> GetById([FromRoute]int productId)
@@ -40,8 +57,10 @@ public class ProductController : ControllerBase
         return Ok(product);
     }
     
-    // CREATE
-    [HttpPost("create")]
+    /// <summary>
+    /// Assigns allergen to own product
+    /// </summary>
+    [HttpPost]
     [Authorize]
     public ActionResult Create([FromBody] CreateProductDto dto)
     {
@@ -51,7 +70,35 @@ public class ProductController : ControllerBase
         return Created($"/api/product/{id}", null);
     }
     
-    // ADD ALLERGEN TO PRODUCT
+    /// <summary>
+    /// Updates product
+    /// </summary>
+    /// <remarks>Only name so far</remarks>
+    [HttpPut("{productId}")]
+    [Authorize]
+    public ActionResult Update([FromRoute] int productId, [FromBody] UpdateProductDto dto)
+    {
+        var userId = int.Parse(User.FindFirst(c => c.Type == ClaimTypes.NameIdentifier).Value);
+        _productService.UpdateProduct(userId, productId, dto, User);
+
+        return NoContent();
+    }
+    
+    /// <summary>
+    /// Deletes product and existing allergen assignments
+    /// </summary>
+    [HttpDelete("{productId}")]
+    [Authorize]
+    public ActionResult Delete(int productId)
+    {
+        _productService.DeleteProduct(productId, User);
+
+        return NoContent();
+    }
+    
+    /// <summary>
+    /// Assigns allergen to own product
+    /// </summary>
     [HttpPost("{productId}/assignallergen/{allergenId}")]
     [Authorize]
     public ActionResult AssignAllergen([FromRoute] int productId, [FromRoute] int allergenId)
@@ -59,6 +106,24 @@ public class ProductController : ControllerBase
         var userId = int.Parse(User.FindFirst(c => c.Type == ClaimTypes.NameIdentifier).Value);
         _productService.AssignAllergen(productId, allergenId, User);
 
-        return Ok();
+        return NoContent();
+    }
+    
+    /// <summary>
+    /// Unassigns allergen from own product
+    /// </summary>
+    /// <remarks>Only own products</remarks>
+    /// <response code="204">Unassigned succesfully</response>
+    /// <response code="401">Unauthorized</response>
+    /// <response code="400">Product has missing/invalid values</response>
+    /// <response code="500">Server error</response>
+    [HttpPost("{productId}/unassignallergen/{allergenId}")]
+    [Authorize]
+    public ActionResult UnssignAllergen([FromRoute] int productId, [FromRoute] int allergenId)
+    {
+        var userId = int.Parse(User.FindFirst(c => c.Type == ClaimTypes.NameIdentifier).Value);
+        _productService.UnassignAllergen(productId, allergenId, User);
+
+        return NoContent();
     }
 }

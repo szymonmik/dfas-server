@@ -16,11 +16,10 @@ public class DataSeeder
 	{
 		if (_dbContext.Database.CanConnect())
 		{
-
 			var pendingMigrations = _dbContext.Database.GetPendingMigrations();
 			if(pendingMigrations != null && pendingMigrations.Any())
             {
-				_dbContext.Database.Migrate();
+	            _dbContext.Database.Migrate();
             }
 
 			if (!_dbContext.Regions.Any())
@@ -61,6 +60,13 @@ public class DataSeeder
 			{
 				var productAllergens = GetProductAllergens();
 				_dbContext.ProductHasAllergens.AddRange(productAllergens);
+				_dbContext.SaveChanges();
+			}
+
+			if (!_dbContext.Symptoms.Any())
+			{
+				var symptoms = GetSymptoms();
+				_dbContext.Symptoms.AddRange(symptoms);
 				_dbContext.SaveChanges();
 			}
 		}
@@ -351,5 +357,58 @@ public class DataSeeder
 		};
 
 		return productAllergens;
+	}
+
+	private IEnumerable<Symptom> GetSymptoms()
+	{
+		var symptoms = new List<Symptom>()
+		{
+			new Symptom()
+			{
+				Name = "Wodnisty katar"
+			},
+			new Symptom()
+			{
+				Name = "Kichanie"
+			},
+			new Symptom()
+			{
+				Name = "Zatkany nos"
+			},
+			new Symptom()
+			{
+				Name = "Swędzenie gardła"
+			},
+			new Symptom()
+			{
+				Name = "Zaczerwienienie"
+			},
+			new Symptom()
+			{
+				Name = "Swędzenie"
+			},
+			new Symptom()
+			{
+				Name = "Łzawienie oczu"
+			},
+			new Symptom()
+			{
+				Name = "Kaszel"
+			},
+			new Symptom()
+			{
+				Name = "Świszczący oddech"
+			},
+			new Symptom()
+			{
+				Name = "Wymioty"
+			},
+			new Symptom()
+			{
+				Name = "Biegunka"
+			}
+		};
+
+		return symptoms;
 	}
 }

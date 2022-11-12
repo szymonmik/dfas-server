@@ -17,7 +17,9 @@ public class UserController : ControllerBase
         _userService = userService;
     }
     
-    // /api/user/register
+    /// <summary>
+    /// Creates new user account
+    /// </summary>
     [HttpPost("register")]
     public ActionResult Register([FromBody]RegisterUserDto dto)
     {
@@ -26,7 +28,9 @@ public class UserController : ControllerBase
         return Ok();
     }
     
-    // /api/user/authenticate
+    /// <summary>
+    /// Returns succesfully authenticated user token
+    /// </summary>
     [HttpPost("authenticate")]
     [Produces("application/json")]
     public ActionResult Authenticate([FromBody]LoginDto dto)
@@ -37,60 +41,73 @@ public class UserController : ControllerBase
         return Ok(authenticationResponse);
     }
 
-    [HttpGet("{id}")]
+    /// <summary>
+    /// Gets authorized user data
+    /// </summary>
+    [HttpGet("{userId}")]
     [Authorize]
-    public ActionResult GetUser([FromRoute]int id)
+    public ActionResult GetUser([FromRoute]int userId)
     {
-        var user = _userService.GetUser(id, User);
+        var user = _userService.GetUser(userId, User);
         return Ok(user);
     }
     
-    // /api/user/{id}/update/region
-    [HttpPost("{id}/update/region")]
+    /// <summary>
+    /// Updates authorized user region
+    /// </summary>
+    [HttpPost("{userId}/update/region")]
     [Authorize]
-    public ActionResult UpdateRegion([FromRoute]int id, [FromBody]UpdateUserRegionDto dto)
+    public ActionResult UpdateRegion([FromRoute]int userId, [FromBody]UpdateUserRegionDto dto)
     {
-        _userService.UpdateUserRegion(id, dto, User);
+        _userService.UpdateUserRegion(userId, dto, User);
 
         return NoContent();
     }
 
-    // /api/user/{id}/update/name
-    [HttpPost("{id}/update/name")]
+    /// <summary>
+    /// Updates authorized user name
+    /// </summary>
+    [HttpPost("{userId}/update/name")]
     [Authorize]
-    public ActionResult UpdateName([FromRoute] int id, [FromBody] UpdateUserNameDto dto)
+    public ActionResult UpdateName([FromRoute] int userId, [FromBody] UpdateUserNameDto dto)
     {
-        _userService.UpdateUserName(id, dto, User);
+        _userService.UpdateUserName(userId, dto, User);
 
         return NoContent();
     }
 
-    // /api/user/{id}/update/sex
-    [HttpPost("{id}/update/sex")]
+    /// <summary>
+    /// Updates authorized user sex
+    /// </summary>
+    [HttpPost("{userId}/update/sex")]
     [Authorize]
-    public ActionResult UpdateSex([FromRoute] int id, [FromBody] UpdateUserSexDto dto)
+    public ActionResult UpdateSex([FromRoute] int userId, [FromBody] UpdateUserSexDto dto)
     {
-        _userService.UpdateUserSex(id, dto, User);
+        _userService.UpdateUserSex(userId, dto, User);
 
         return NoContent();
     }
 
-    // /api/user/{id}/update
-    [HttpPost("{id}/update")]
+    /// <summary>
+    /// Updates authorized user region, name and sex
+    /// </summary>
+    [HttpPost("{userId}/update")]
     [Authorize]
-    public ActionResult Update([FromRoute] int id, [FromBody] UpdateUserDto dto)
+    public ActionResult Update([FromRoute] int userId, [FromBody] UpdateUserDto dto)
     {
-        _userService.UpdateUser(id, dto, User);
+        _userService.UpdateUser(userId, dto, User);
 
         return NoContent();
     }
     
-    // /api/user/{id}/update/password
-    [HttpPost("{id}/update/password")]
+    /// <summary>
+    /// Updates authorized user password
+    /// </summary>
+    [HttpPost("{userId}/update/password")]
     [Authorize]
-    public ActionResult Update([FromRoute] int id, [FromBody] UpdateUserPasswordDto dto)
+    public ActionResult Update([FromRoute] int userId, [FromBody] UpdateUserPasswordDto dto)
     {
-        _userService.UpdateUserPassword(id, dto, User);
+        _userService.UpdateUserPassword(userId, dto, User);
 
         return NoContent();
     }
