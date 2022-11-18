@@ -1,4 +1,5 @@
-﻿namespace server.Entities;
+﻿
+namespace server.Entities;
 
 public class PollinationCalendar
 {
@@ -10,7 +11,7 @@ public class PollinationCalendar
 	public int AllergenId { get; set; }
 	public virtual Allergen Allergen { get; set; }
 	
-	public int Month { get; set; }
-	
+	public DateTime Date { get; set; }
+
 	public int Strength { get; set; }
 }

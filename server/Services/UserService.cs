@@ -54,6 +54,9 @@ public class UserService : IUserService
 		var user = _context.Users
 			.Include(u => u.Role)
 			.Include(u => u.Region)
+			.Include(x => x.UserAllergens)
+			.ThenInclude(x => x.Allergen)
+			.ThenInclude(x => x.AllergenType)
 			.FirstOrDefault(u => u.Email == dto.Email);
 
 		if(user is null)
@@ -87,15 +90,19 @@ public class UserService : IUserService
 
 		var tokenHandler = new JwtSecurityTokenHandler();
 		var tokenString = tokenHandler.WriteToken(token);
-		AuthenticationResponse authenticationResponse = new AuthenticationResponse(user, tokenString);
+		
+		var userDto = _mapper.Map<UserDto>(user);
+		AuthenticationResponse authenticationResponse = new AuthenticationResponse(userDto, tokenString);
 		return authenticationResponse;
 	}
 
-	public User GetUser(int id, ClaimsPrincipal userPrincipal)
+	public UserDto GetUser(int id, ClaimsPrincipal userPrincipal)
     {
 		var user = _context.Users
 			.Include(u => u.Role)
 			.Include(u => u.Region)
+			.Include(x => x.UserAllergens)
+			.ThenInclude(x => x.Allergen)
 			.FirstOrDefault(u => u.Id == id);
 
 		if (user is null)
@@ -109,8 +116,10 @@ public class UserService : IUserService
 		{
 			throw new ForbidException("Forbidden for this user");
 		}
+		
+		var userDto = _mapper.Map<UserDto>(user);
 
-		return user;
+		return userDto;
 	}
 
 	public void UpdateUserRegion(int id, UpdateUserRegionDto dto, ClaimsPrincipal userPrincipal)
@@ -218,6 +227,83 @@ public class UserService : IUserService
 		var newHashedPassword = _passwordHasher.HashPassword(user, dto.Password);
 		user.PasswordHash = newHashedPassword;
 
+		_context.SaveChanges();
+	}
+	
+	public void AssignAllergen(int allergenId, ClaimsPrincipal userPrincipal)
+	{
+		var userId = int.Parse(userPrincipal.FindFirst(c => c.Type == ClaimTypes.NameIdentifier).Value);
+		var user = _context.Users.FirstOrDefault(u => u.Id == userId);
+
+		var allergen = _context.Allergens
+			.Include(x => x.AllergenType)
+			.FirstOrDefault(x => x.Id == allergenId);
+
+		if (allergen is null)
+		{
+			throw new NotFoundException("Allergen not found");
+		}
+
+		if (allergen.AllergenType.Name != "Wziewny")
+		{
+			throw new BadRequestException("Bad allergen type");
+		}
+		
+		if (user is null)
+		{
+			throw new NotFoundException("User not found");
+		}
+		
+		
+		var authorizationResult = _authorizationService.AuthorizeAsync(userPrincipal, user, new ResourceOperationRequirement(ResourceOperation.Update)).Result;
+
+		if (!authorizationResult.Succeeded)
+		{
+			throw new ForbidException("Forbidden for this user");
+		}
+		
+		var existingAssignment = _context.UserHasAllergens.FirstOrDefault(x => x.UserId == userId && x.AllergenId == allergenId);
+
+		if (existingAssignment != null)
+		{
+			throw new BadRequestException("Already assigned");
+		}
+
+		var assignment = new UserHasAllergen
+		{
+			UserId = userId,
+			AllergenId = allergenId
+		};
+		
+		_context.UserHasAllergens.Add(assignment);
+		_context.SaveChanges();
+	}
+
+	public void UnassignAllergen(int allergenId, ClaimsPrincipal userPrincipal)
+	{
+		var userId = int.Parse(userPrincipal.FindFirst(c => c.Type == ClaimTypes.NameIdentifier).Value);
+		var user = _context.Users.FirstOrDefault(u => u.Id == userId);
+
+		if (user is null)
+		{
+			throw new NotFoundException("User not found");
+		}
+
+		var authorizationResult = _authorizationService.AuthorizeAsync(userPrincipal, user, new ResourceOperationRequirement(ResourceOperation.Update)).Result;
+
+		if (!authorizationResult.Succeeded)
+		{
+			throw new ForbidException("Forbidden for this user");
+		}
+
+		var existingAssignment = _context.UserHasAllergens.FirstOrDefault(x => x.UserId == userId && x.AllergenId == allergenId);
+
+		if (existingAssignment is null)
+		{
+			throw new BadRequestException("Assignment does not exist");
+		}
+
+		_context.Remove(existingAssignment);
 		_context.SaveChanges();
 	}
 }

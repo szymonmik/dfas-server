@@ -64,6 +64,58 @@ namespace server.Migrations
                     b.ToTable("AllergenTypes");
                 });
 
+            modelBuilder.Entity("server.Entities.Entry", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<DateTime?>("Date")
+                        .IsRequired()
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Entries");
+                });
+
+            modelBuilder.Entity("server.Entities.EntryHasProduct", b =>
+                {
+                    b.Property<int>("EntryId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int");
+
+                    b.HasKey("EntryId", "ProductId");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("EntryHasProducts");
+                });
+
+            modelBuilder.Entity("server.Entities.EntryHasSymptom", b =>
+                {
+                    b.Property<int>("EntryId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SymptomId")
+                        .HasColumnType("int");
+
+                    b.HasKey("EntryId", "SymptomId");
+
+                    b.HasIndex("SymptomId");
+
+                    b.ToTable("EntryHasSymptoms");
+                });
+
             modelBuilder.Entity("server.Entities.Product", b =>
                 {
                     b.Property<int>("Id")
@@ -196,6 +248,21 @@ namespace server.Migrations
                     b.ToTable("Users");
                 });
 
+            modelBuilder.Entity("server.Entities.UserHasAllergen", b =>
+                {
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("AllergenId")
+                        .HasColumnType("int");
+
+                    b.HasKey("UserId", "AllergenId");
+
+                    b.HasIndex("AllergenId");
+
+                    b.ToTable("UserHasAllergens");
+                });
+
             modelBuilder.Entity("server.Entities.Allergen", b =>
                 {
                     b.HasOne("server.Entities.AllergenType", "AllergenType")
@@ -205,6 +272,55 @@ namespace server.Migrations
                         .IsRequired();
 
                     b.Navigation("AllergenType");
+                });
+
+            modelBuilder.Entity("server.Entities.Entry", b =>
+                {
+                    b.HasOne("server.Entities.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("server.Entities.EntryHasProduct", b =>
+                {
+                    b.HasOne("server.Entities.Entry", "Entry")
+                        .WithMany("EntryProducts")
+                        .HasForeignKey("EntryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("server.Entities.Product", "Product")
+                        .WithMany()
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Entry");
+
+                    b.Navigation("Product");
+                });
+
+            modelBuilder.Entity("server.Entities.EntryHasSymptom", b =>
+                {
+                    b.HasOne("server.Entities.Entry", "Entry")
+                        .WithMany("EntrySymptoms")
+                        .HasForeignKey("EntryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("server.Entities.Symptom", "Symptom")
+                        .WithMany()
+                        .HasForeignKey("SymptomId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Entry");
+
+                    b.Navigation("Symptom");
                 });
 
             modelBuilder.Entity("server.Entities.Product", b =>
@@ -254,9 +370,40 @@ namespace server.Migrations
                     b.Navigation("Role");
                 });
 
+            modelBuilder.Entity("server.Entities.UserHasAllergen", b =>
+                {
+                    b.HasOne("server.Entities.Allergen", "Allergen")
+                        .WithMany()
+                        .HasForeignKey("AllergenId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("server.Entities.User", "User")
+                        .WithMany("UserAllergens")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Allergen");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("server.Entities.Entry", b =>
+                {
+                    b.Navigation("EntryProducts");
+
+                    b.Navigation("EntrySymptoms");
+                });
+
             modelBuilder.Entity("server.Entities.Product", b =>
                 {
                     b.Navigation("ProductAllergens");
+                });
+
+            modelBuilder.Entity("server.Entities.User", b =>
+                {
+                    b.Navigation("UserAllergens");
                 });
 #pragma warning restore 612, 618
         }

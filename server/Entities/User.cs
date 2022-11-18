@@ -15,4 +15,6 @@ public class User
 	
 	public int RegionId { get; set; }
 	public virtual Region Region { get; set; }
+	
+	public IEnumerable<UserHasAllergen> UserAllergens { get; set; }
 }

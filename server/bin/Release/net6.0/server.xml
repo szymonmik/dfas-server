@@ -46,7 +46,7 @@
         </member>
         <member name="M:server.Controllers.ProductController.Create(server.Models.CreateProductDto)">
             <summary>
-            Assigns allergen to own product
+            Creates product
             </summary>
         </member>
         <member name="M:server.Controllers.ProductController.Update(System.Int32,server.Models.UpdateProductDto)">
@@ -65,7 +65,7 @@
             Assigns allergen to own product
             </summary>
         </member>
-        <member name="M:server.Controllers.ProductController.UnssignAllergen(System.Int32,System.Int32)">
+        <member name="M:server.Controllers.ProductController.UnassignAllergen(System.Int32,System.Int32)">
             <summary>
             Unassigns allergen from own product
             </summary>
@@ -74,6 +74,11 @@
             <response code="401">Unauthorized</response>
             <response code="400">Product has missing/invalid values</response>
             <response code="500">Server error</response>
+        </member>
+        <member name="M:server.Controllers.ProductController.GetFiltered">
+            <summary>
+            For testing purposes, do not use
+            </summary>
         </member>
         <member name="M:server.Controllers.RegionController.GetAll">
             <summary>
@@ -133,6 +138,16 @@
         <member name="M:server.Controllers.UserController.Update(System.Int32,server.Models.UpdateUserPasswordDto)">
             <summary>
             Updates authorized user password
+            </summary>
+        </member>
+        <member name="M:server.Controllers.UserController.AssignAllergen(System.Int32)">
+            <summary>
+            Assigns allergen to own account
+            </summary>
+        </member>
+        <member name="M:server.Controllers.UserController.UnssignAllergen(System.Int32)">
+            <summary>
+            Unassigns allergen from own account
             </summary>
         </member>
     </members>

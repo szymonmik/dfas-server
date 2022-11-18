@@ -21,8 +21,15 @@ public class AppDbContext : DbContext
 	public DbSet<Region> Regions { get; set; }
 	
 	public DbSet<ProductHasAllergen> ProductHasAllergens { get; set; }
+	
+	public DbSet<UserHasAllergen> UserHasAllergens { get; set; }
 
 	public DbSet<Symptom> Symptoms { get; set; }
+	
+	public DbSet<Entry> Entries { get; set; }
+	public DbSet<EntryHasProduct> EntryHasProducts { get; set; }
+	public DbSet<EntryHasSymptom> EntryHasSymptoms { get; set; }
+	
 
 	protected override void OnModelCreating(ModelBuilder modelBuilder)
 	{
@@ -45,7 +52,12 @@ public class AppDbContext : DbContext
 		modelBuilder.Entity<AllergenType>()
 			.Property(u => u.Name)
 			.IsRequired();
-
+		
+		modelBuilder.Entity<Entry>()
+			.Property(u => u.Date)
+			.IsRequired();
+		
+		// PRODUCT - ALLERGEN RELATIONSHIP
 		modelBuilder.Entity<ProductHasAllergen>()
 			.HasKey(x => new { x.ProductId, x.AllergenId });
 
@@ -63,6 +75,63 @@ public class AppDbContext : DbContext
 			.HasMany(x => x.ProductAllergens)
 			.WithOne(x => x.Product)
 			.HasForeignKey(x => x.ProductId);
+		
+		// USER - ALLERGEN RELATIONSHIP
+		modelBuilder.Entity<UserHasAllergen>()
+			.HasKey(x => new { x.UserId, x.AllergenId });
+
+		modelBuilder.Entity<UserHasAllergen>()
+			.HasOne(x => x.User)
+			.WithMany(x => x.UserAllergens)
+			.HasForeignKey(x => x.UserId);
+
+		modelBuilder.Entity<UserHasAllergen>()
+			.HasOne(x => x.Allergen)
+			.WithMany()
+			.HasForeignKey(x => x.AllergenId);
+
+		modelBuilder.Entity<User>()
+			.HasMany(x => x.UserAllergens)
+			.WithOne(x => x.User)
+			.HasForeignKey(x => x.UserId);
+		
+		// ENTRY - PRODUCT RELATIONSHIP
+		modelBuilder.Entity<EntryHasProduct>()
+			.HasKey(x => new { x.EntryId, x.ProductId });
+
+		modelBuilder.Entity<EntryHasProduct>()
+			.HasOne(x => x.Entry)
+			.WithMany(x => x.EntryProducts)
+			.HasForeignKey(x => x.EntryId);
+
+		modelBuilder.Entity<EntryHasProduct>()
+			.HasOne(x => x.Product)
+			.WithMany()
+			.HasForeignKey(x => x.ProductId);
+
+		modelBuilder.Entity<Entry>()
+			.HasMany(x => x.EntryProducts)
+			.WithOne(x => x.Entry)
+			.HasForeignKey(x => x.EntryId);
+		
+		// ENTRY - SYMPTOM RELATIONSHIP
+		modelBuilder.Entity<EntryHasSymptom>()
+			.HasKey(x => new { x.EntryId, x.SymptomId });
+
+		modelBuilder.Entity<EntryHasSymptom>()
+			.HasOne(x => x.Entry)
+			.WithMany(x => x.EntrySymptoms)
+			.HasForeignKey(x => x.EntryId);
+
+		modelBuilder.Entity<EntryHasSymptom>()
+			.HasOne(x => x.Symptom)
+			.WithMany()
+			.HasForeignKey(x => x.SymptomId);
+
+		modelBuilder.Entity<Entry>()
+			.HasMany(x => x.EntrySymptoms)
+			.WithOne(x => x.Entry)
+			.HasForeignKey(x => x.EntryId);
 	}
 
 	/*protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) 

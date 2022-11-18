@@ -24,6 +24,61 @@
             Gets allergen type by id
             </summary>
         </member>
+        <member name="M:server.Controllers.EntryController.GetAllCurrentUser">
+            <summary>
+            Gets all own entries
+            </summary>
+        </member>
+        <member name="M:server.Controllers.EntryController.GetById(System.Int32)">
+            <summary>
+            Gets own entry by id
+            </summary>
+        </member>
+        <member name="M:server.Controllers.EntryController.GetByDate(System.String)">
+            <summary>
+            Gets own entry by date
+            </summary>
+        </member>
+        <member name="M:server.Controllers.EntryController.CreateEmpty(server.Models.CreateEntryDto)">
+            <summary>
+            Creates empty entry
+            </summary>
+        </member>
+        <member name="M:server.Controllers.EntryController.Delete(System.String)">
+            <summary>
+            Deletes entry and existing assignments
+            </summary>
+        </member>
+        <member name="M:server.Controllers.EntryController.AssignProduct(System.String,System.Int32)">
+            <summary>
+            Assigns product to own entry with provided date
+            </summary>
+        </member>
+        <member name="M:server.Controllers.EntryController.UnassignProduct(System.String,System.Int32)">
+            <summary>
+            Unassigns product from own entry with provided date
+            </summary>
+            <remarks>Only own products</remarks>
+            <response code="204">Unassigned succesfully</response>
+            <response code="401">Unauthorized</response>
+            <response code="400">Product has missing/invalid values</response>
+            <response code="500">Server error</response>
+        </member>
+        <member name="M:server.Controllers.EntryController.AssignSymptom(System.String,System.Int32)">
+            <summary>
+            Assigns product to own entry with provided date
+            </summary>
+        </member>
+        <member name="M:server.Controllers.EntryController.UnassignSymptom(System.String,System.Int32)">
+            <summary>
+            Unassigns product from own entry with provided date
+            </summary>
+            <remarks>Only own products</remarks>
+            <response code="204">Unassigned succesfully</response>
+            <response code="401">Unauthorized</response>
+            <response code="400">Product has missing/invalid values</response>
+            <response code="500">Server error</response>
+        </member>
         <member name="M:server.Controllers.PollinationController.GetToday">
             <summary>
             Not implemented yet
@@ -46,7 +101,7 @@
         </member>
         <member name="M:server.Controllers.ProductController.Create(server.Models.CreateProductDto)">
             <summary>
-            Assigns allergen to own product
+            Creates product
             </summary>
         </member>
         <member name="M:server.Controllers.ProductController.Update(System.Int32,server.Models.UpdateProductDto)">
@@ -65,7 +120,7 @@
             Assigns allergen to own product
             </summary>
         </member>
-        <member name="M:server.Controllers.ProductController.UnssignAllergen(System.Int32,System.Int32)">
+        <member name="M:server.Controllers.ProductController.UnassignAllergen(System.Int32,System.Int32)">
             <summary>
             Unassigns allergen from own product
             </summary>
@@ -74,6 +129,11 @@
             <response code="401">Unauthorized</response>
             <response code="400">Product has missing/invalid values</response>
             <response code="500">Server error</response>
+        </member>
+        <member name="M:server.Controllers.ProductController.GetFiltered">
+            <summary>
+            For testing purposes, do not use
+            </summary>
         </member>
         <member name="M:server.Controllers.RegionController.GetAll">
             <summary>
@@ -133,6 +193,16 @@
         <member name="M:server.Controllers.UserController.Update(System.Int32,server.Models.UpdateUserPasswordDto)">
             <summary>
             Updates authorized user password
+            </summary>
+        </member>
+        <member name="M:server.Controllers.UserController.AssignAllergen(System.Int32)">
+            <summary>
+            Assigns allergen to own account
+            </summary>
+        </member>
+        <member name="M:server.Controllers.UserController.UnssignAllergen(System.Int32)">
+            <summary>
+            Unassigns allergen from own account
             </summary>
         </member>
     </members>

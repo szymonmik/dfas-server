@@ -58,7 +58,7 @@ public class ProductController : ControllerBase
     }
     
     /// <summary>
-    /// Assigns allergen to own product
+    /// Creates product
     /// </summary>
     [HttpPost]
     [Authorize]
@@ -74,14 +74,14 @@ public class ProductController : ControllerBase
     /// Updates product
     /// </summary>
     /// <remarks>Only name so far</remarks>
-    [HttpPut("{productId}")]
+    [HttpPost("update/{productId}")]
     [Authorize]
     public ActionResult Update([FromRoute] int productId, [FromBody] UpdateProductDto dto)
     {
         var userId = int.Parse(User.FindFirst(c => c.Type == ClaimTypes.NameIdentifier).Value);
         _productService.UpdateProduct(userId, productId, dto, User);
 
-        return NoContent();
+        return Ok();
     }
     
     /// <summary>
@@ -93,7 +93,7 @@ public class ProductController : ControllerBase
     {
         _productService.DeleteProduct(productId, User);
 
-        return NoContent();
+        return Ok();
     }
     
     /// <summary>
@@ -103,10 +103,10 @@ public class ProductController : ControllerBase
     [Authorize]
     public ActionResult AssignAllergen([FromRoute] int productId, [FromRoute] int allergenId)
     {
-        var userId = int.Parse(User.FindFirst(c => c.Type == ClaimTypes.NameIdentifier).Value);
+        //var userId = int.Parse(User.FindFirst(c => c.Type == ClaimTypes.NameIdentifier).Value);
         _productService.AssignAllergen(productId, allergenId, User);
 
-        return NoContent();
+        return Ok();
     }
     
     /// <summary>
@@ -119,11 +119,22 @@ public class ProductController : ControllerBase
     /// <response code="500">Server error</response>
     [HttpPost("{productId}/unassignallergen/{allergenId}")]
     [Authorize]
-    public ActionResult UnssignAllergen([FromRoute] int productId, [FromRoute] int allergenId)
+    public ActionResult UnassignAllergen([FromRoute] int productId, [FromRoute] int allergenId)
     {
-        var userId = int.Parse(User.FindFirst(c => c.Type == ClaimTypes.NameIdentifier).Value);
+        //var userId = int.Parse(User.FindFirst(c => c.Type == ClaimTypes.NameIdentifier).Value);
         _productService.UnassignAllergen(productId, allergenId, User);
 
-        return NoContent();
+        return Ok();
+    }
+    
+    /// <summary>
+    /// For testing purposes, do not use
+    /// </summary>
+    [HttpGet("filtered")]
+    public ActionResult<Product> GetFiltered()
+    {
+        var products = _productService.GetFiltered();
+
+        return Ok(products);
     }
 }

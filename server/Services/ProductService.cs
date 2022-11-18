@@ -177,6 +177,7 @@ public class ProductService : IProductService
 			throw new NotFoundException("Product not found");
 		}
 		
+		
 		var authorizationResult = _authorizationService.AuthorizeAsync(userPrincipal, product, new ResourceOperationRequirement(ResourceOperation.Update)).Result;
 
 		if (!authorizationResult.Succeeded)
@@ -213,6 +214,7 @@ public class ProductService : IProductService
 			throw new NotFoundException("Product not found");
 		}
 
+		
 		var authorizationResult = _authorizationService.AuthorizeAsync(userPrincipal, product, new ResourceOperationRequirement(ResourceOperation.Update)).Result;
 
 		if (!authorizationResult.Succeeded)
@@ -229,5 +231,31 @@ public class ProductService : IProductService
 
 		_dbContext.Remove(existingAssignment);
 		_dbContext.SaveChanges();
+	}
+	
+	public IEnumerable<ProductDto> GetFiltered()
+	{
+		var products = _dbContext.Products
+			.Include(p => p.ProductAllergens)
+			.ThenInclude(x => x.Allergen)
+			.ThenInclude(x => x.AllergenType);
+
+		List<String> filters = new List<string>();
+		filters.Add("Gluten");
+		filters.Add("Seler");
+
+		if (products is null)
+		{
+			throw new NotFoundException("Product not found");
+		}
+		
+		//var filteredProducts = products.Where(p => p.ProductAllergens.All(c => filters.ToList().Contains(c.Allergen.Name)));
+		//var filteredProducts = products.Where(p => filters.All(al => p.ProductAllergens.Any(c => c.Allergen.Name.Contains(al))));
+		var filteredProducts = products.Where(p => p.ProductAllergens.Any(c => filters.Contains(c.Allergen.Name)));
+		//var filteredProducts = products.Where(p => p.ProductAllergens.Any(c => p.ProductAllergens));
+		
+		var productDtos = _mapper.Map<List<ProductDto>>(filteredProducts);
+
+		return productDtos;
 	}
 }

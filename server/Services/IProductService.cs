@@ -13,4 +13,5 @@ public interface IProductService
 	void DeleteProduct(int productId, ClaimsPrincipal userPrincipal);
 	void AssignAllergen(int productId, int allergenId, ClaimsPrincipal userPrincipal);
 	void UnassignAllergen(int productId, int allergenId, ClaimsPrincipal userPrincipal);
+	IEnumerable<ProductDto> GetFiltered();
 }

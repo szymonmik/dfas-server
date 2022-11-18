@@ -111,4 +111,28 @@ public class UserController : ControllerBase
 
         return NoContent();
     }
+    
+    /// <summary>
+    /// Assigns allergen to own account
+    /// </summary>
+    [HttpPost("assignallergen/{allergenId}")]
+    [Authorize]
+    public ActionResult AssignAllergen([FromRoute] int allergenId)
+    {
+        _userService.AssignAllergen(allergenId, User);
+
+        return NoContent();
+    }
+    
+    /// <summary>
+    /// Unassigns allergen from own account
+    /// </summary>
+    [HttpPost("unassignallergen/{allergenId}")]
+    [Authorize]
+    public ActionResult UnssignAllergen([FromRoute] int allergenId)
+    {
+        _userService.UnassignAllergen(allergenId, User);
+
+        return NoContent();
+    }
 }

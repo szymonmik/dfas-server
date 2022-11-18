@@ -24,14 +24,14 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddCors(options =>
 {
-    options.AddDefaultPolicy(
-        policy  =>
-        {
-            policy
-                .AllowAnyHeader()
-                .AllowAnyHeader()
-                .AllowAnyOrigin();
-        });
+	options.AddDefaultPolicy(
+		policy =>
+		{
+			policy
+				.AllowAnyHeader()
+				.AllowAnyOrigin()
+				.AllowAnyMethod();
+		});
 });
 
 // Authentication snippet
@@ -42,37 +42,41 @@ builder.Configuration.GetSection("Authentication").Bind(authenticationSettings);
 builder.Services.AddSingleton<AuthenticationSettings>(authenticationSettings);
 builder.Services.AddAuthentication(option =>
 {
-    option.DefaultAuthenticateScheme = "Bearer";
-    option.DefaultScheme = "Bearer";
-    option.DefaultChallengeScheme = "Bearer";
+	option.DefaultAuthenticateScheme = "Bearer";
+	option.DefaultScheme = "Bearer";
+	option.DefaultChallengeScheme = "Bearer";
 }).AddJwtBearer(cfg =>
 {
-    cfg.RequireHttpsMetadata = false;
-    cfg.SaveToken = true;
-    cfg.TokenValidationParameters = new TokenValidationParameters
-    {
-        ValidIssuer = authenticationSettings.JwtIssuer,
-        ValidAudience = authenticationSettings.JwtIssuer,
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(authenticationSettings.JwtKey)),
-    };
+	cfg.RequireHttpsMetadata = false;
+	cfg.SaveToken = true;
+	cfg.TokenValidationParameters = new TokenValidationParameters
+	{
+		ValidIssuer = authenticationSettings.JwtIssuer,
+		ValidAudience = authenticationSettings.JwtIssuer,
+		IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(authenticationSettings.JwtKey)),
+	};
 });
 
 builder.Services.AddAuthorization();
 builder.Services.AddScoped<IAuthorizationHandler, ResourceOperationRequirementHandler>();
 builder.Services.AddScoped<IAuthorizationHandler, ProductResourceOperationRequirementHandler>();
+builder.Services.AddScoped<IAuthorizationHandler, EntryResourceOperationRequirementHandler>();
 
-builder.Services.AddControllers().AddJsonOptions(x => x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
+builder.Services.AddControllers()
+	.AddJsonOptions(x => x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
 
 // my
 builder.Services.AddLogging();
 builder.Services.AddFluentValidationAutoValidation().AddFluentValidationClientsideAdapters();
-builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("AppDbConnection")));
+builder.Services.AddDbContext<AppDbContext>(options =>
+	options.UseSqlServer(builder.Configuration.GetConnectionString("AppDbConnection")));
 builder.Services.AddScoped<DataSeeder>();
-builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
+builder.Services.AddAutoMapper(typeof(AppMappingProfile).Assembly); // Assembly.GetExecutingAssembly()
 builder.Services.AddScoped<IAllergenService, AllergenService>();
 builder.Services.AddScoped<IRegionService, RegionService>();
 builder.Services.AddScoped<ISymptomService, SymptomService>();
 builder.Services.AddScoped<IProductService, ProductService>();
+builder.Services.AddScoped<IEntryService, EntryService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<ErrorHandlingMiddleware>();
 builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
@@ -83,16 +87,40 @@ builder.Services.AddScoped<IValidator<UpdateUserPasswordDto>, UpdateUserPassword
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
-    c.SwaggerDoc("v1",
-        new OpenApiInfo
-        {
-            Title = "Allergy Diary API",
-            Version = "v1"
-        });
-    var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-    c.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
+	c.SwaggerDoc("v1",
+		new OpenApiInfo
+		{
+			Title = "Allergy Diary API",
+			Version = "v1"
+		});
+	var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+	c.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
+	/*c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
+	{
+		Description = "JWT Authorization header",
+		Name = "Authorization",
+		In = ParameterLocation.Header,
+		Type = SecuritySchemeType.ApiKey,
+		Scheme = "Bearer"
+	});
+	c.AddSecurityRequirement(new OpenApiSecurityRequirement()
+	{
+		{
+			new OpenApiSecurityScheme()
+			{
+				Reference = new OpenApiReference()
+				{
+					Type = ReferenceType.SecurityScheme,
+					Id = "Bearer"
+				},
+				Scheme = "oauth2",
+				Name = "Bearer",
+				In = ParameterLocation.Header
+			},
+			new List<string>()
+		}
+	});*/
 });
-
 
 
 //NLog
