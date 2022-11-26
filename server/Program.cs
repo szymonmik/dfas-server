@@ -78,6 +78,7 @@ builder.Services.AddScoped<ISymptomService, SymptomService>();
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<IEntryService, EntryService>();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IPollinationService, PollinationService>();
 builder.Services.AddScoped<ErrorHandlingMiddleware>();
 builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
 builder.Services.AddScoped<IValidator<RegisterUserDto>, RegisterUserDtoValidator>();

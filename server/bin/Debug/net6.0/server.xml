@@ -79,9 +79,14 @@
             <response code="400">Product has missing/invalid values</response>
             <response code="500">Server error</response>
         </member>
-        <member name="M:server.Controllers.PollinationController.GetToday">
+        <member name="M:server.Controllers.PollinationController.GetByDate(System.Int32,System.String)">
             <summary>
-            Not implemented yet
+            Gets pollination by date
+            </summary>
+        </member>
+        <member name="M:server.Controllers.PollinationController.FillRandomOnDate(System.String)">
+            <summary>
+            
             </summary>
         </member>
         <member name="M:server.Controllers.ProductController.GetAll">

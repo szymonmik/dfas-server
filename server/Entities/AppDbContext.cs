@@ -30,6 +30,8 @@ public class AppDbContext : DbContext
 	public DbSet<EntryHasProduct> EntryHasProducts { get; set; }
 	public DbSet<EntryHasSymptom> EntryHasSymptoms { get; set; }
 	
+	public DbSet<PollinationCalendar> PollinationCalendars { get; set; }
+	
 
 	protected override void OnModelCreating(ModelBuilder modelBuilder)
 	{
@@ -132,6 +134,9 @@ public class AppDbContext : DbContext
 			.HasMany(x => x.EntrySymptoms)
 			.WithOne(x => x.Entry)
 			.HasForeignKey(x => x.EntryId);
+		
+		// POLLINATION CALLENDAR
+		
 	}
 
 	/*protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) 

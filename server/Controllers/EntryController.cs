@@ -43,10 +43,11 @@ public class EntryController : ControllerBase
 
 		return Ok(entry);
 	}
-	
+
 	/// <summary>
 	/// Gets own entry by date
 	/// </summary>
+	/// <remarks>Date format: rrrr-mm-dd</remarks>
 	[HttpGet("bydate/{entryDate}")]
 	[Authorize]
 	public ActionResult<EntryDto> GetByDate([FromRoute]string entryDate)
@@ -56,10 +57,11 @@ public class EntryController : ControllerBase
 
 		return Ok(entry);
 	}
-    
+
 	/// <summary>
 	/// Creates empty entry
 	/// </summary>
+	/// <remarks>Date format: rrrr-mm-dd</remarks>
 	[HttpPost("empty")]
 	[Authorize]
 	public ActionResult CreateEmpty([FromBody] CreateEntryDto dto)
@@ -69,10 +71,11 @@ public class EntryController : ControllerBase
 
 		return Created($"/api/entry/{id}", null);
 	}
-	
+
 	/// <summary>
 	/// Deletes entry and existing assignments
 	/// </summary>
+	/// <remarks>Date format: rrrr-mm-dd</remarks>
 	[HttpDelete("{entryDate}")]
 	[Authorize]
 	public ActionResult Delete([FromRoute]string entryDate)
@@ -81,10 +84,11 @@ public class EntryController : ControllerBase
 
 		return Ok();
 	}
-	
+
 	/// <summary>
 	/// Assigns product to own entry with provided date
 	/// </summary>
+	/// <remarks>Date format: rrrr-mm-dd</remarks>
 	[HttpPost("{entryDate}/assign/product/{productId}")]
 	[Authorize]
 	public ActionResult AssignProduct([FromRoute] string entryDate, [FromRoute] int productId)
@@ -94,15 +98,11 @@ public class EntryController : ControllerBase
 
 		return Ok();
 	}
-    
+
 	/// <summary>
 	/// Unassigns product from own entry with provided date
 	/// </summary>
-	/// <remarks>Only own products</remarks>
-	/// <response code="204">Unassigned succesfully</response>
-	/// <response code="401">Unauthorized</response>
-	/// <response code="400">Product has missing/invalid values</response>
-	/// <response code="500">Server error</response>
+	/// <remarks>Date format: rrrr-mm-dd</remarks>
 	[HttpPost("{entryDate}/unassign/product/{productId}")]
 	[Authorize]
 	public ActionResult UnassignProduct([FromRoute] string entryDate, [FromRoute] int productId)
@@ -112,10 +112,11 @@ public class EntryController : ControllerBase
 
 		return Ok();
 	}
-	
+
 	/// <summary>
 	/// Assigns product to own entry with provided date
 	/// </summary>
+	/// <remarks>Date format: rrrr-mm-dd</remarks>
 	[HttpPost("{entryDate}/assign/symptom/{symptomId}")]
 	[Authorize]
 	public ActionResult AssignSymptom([FromRoute] string entryDate, [FromRoute] int symptomId)
@@ -125,15 +126,11 @@ public class EntryController : ControllerBase
 
 		return Ok();
 	}
-    
+
 	/// <summary>
 	/// Unassigns product from own entry with provided date
 	/// </summary>
-	/// <remarks>Only own products</remarks>
-	/// <response code="204">Unassigned succesfully</response>
-	/// <response code="401">Unauthorized</response>
-	/// <response code="400">Product has missing/invalid values</response>
-	/// <response code="500">Server error</response>
+	/// <remarks>Date format: rrrr-mm-dd</remarks>
 	[HttpPost("{entryDate}/unassign/symptom/{symptomId}")]
 	[Authorize]
 	public ActionResult UnassignSymptom([FromRoute] string entryDate, [FromRoute] int symptomId)
