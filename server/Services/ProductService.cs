@@ -28,7 +28,7 @@ public class ProductService : IProductService
 
 		if (user is null)
 		{
-			throw new NotFoundException("User not found");
+			throw new NotFoundException("Nie znaleziono użytkownika");
 		}
 		
 		var products = _dbContext.Products
@@ -49,7 +49,7 @@ public class ProductService : IProductService
 
 		if (user is null)
 		{
-			throw new NotFoundException("User not found");
+			throw new NotFoundException("Nie znaleziono użytkownika");
 		}
 		
 		var products = _dbContext.Products
@@ -74,14 +74,15 @@ public class ProductService : IProductService
 
 		if (product is null)
 		{
-			throw new NotFoundException("Product not found");
+			throw new NotFoundException("Nie znaleziono produktu");
 		}
 		
-		var authorizationResult = _authorizationService.AuthorizeAsync(userPrincipal, product, new ResourceOperationRequirement(ResourceOperation.Read)).Result;
+		var authorizationResult = _authorizationService.AuthorizeAsync(userPrincipal, product, 
+			new ResourceOperationRequirement(ResourceOperation.Read)).Result;
 
 		if (!authorizationResult.Succeeded)
 		{
-			throw new ForbidException("Forbidden for this user");
+			throw new ForbidException("Zabronione dla tego użytkownika");
 		}
 		
 		var productDto = _mapper.Map<ProductDto>(product);
@@ -95,14 +96,14 @@ public class ProductService : IProductService
 
 		if (user is null)
 		{
-			throw new NotFoundException("User not found");
+			throw new NotFoundException("Nie znaleziono użytkownika");
 		}
 
 		var existingName = _dbContext.Products.FirstOrDefault(p => p.Name == dto.Name && p.UserId == userId);
 
 		if (existingName != null)
 		{
-			throw new BadRequestException("Product with this name already exists");
+			throw new BadRequestException("Produkt o tej nazwie już istnieje");
 		}
 
 		var product = _mapper.Map<Product>(dto);
@@ -121,21 +122,21 @@ public class ProductService : IProductService
 
 		if (product is null)
 		{
-			throw new NotFoundException("Product not found");
+			throw new NotFoundException("Nie znaleziono produktu");
 		}
 
 		var authorizationResult = _authorizationService.AuthorizeAsync(userPrincipal, product, new ResourceOperationRequirement(ResourceOperation.Update)).Result;
 
 		if (!authorizationResult.Succeeded)
 		{
-			throw new ForbidException("Forbidden for this user");
+			throw new ForbidException("Zabronione dla tego użytkownika");
 		}
 		
 		var existingName = _dbContext.Products.FirstOrDefault(p => p.Name == dto.Name && p.UserId == userId);
 
 		if (existingName != null)
 		{
-			throw new BadRequestException("Product with this name already exists");
+			throw new BadRequestException("Produkt o tej nazwie już istnieje");
 		}
 
 		product.Name = dto.Name;
@@ -151,14 +152,15 @@ public class ProductService : IProductService
 
 		if (product is null)
 		{
-			throw new NotFoundException("Product not found");
+			throw new NotFoundException("Nie znaleziono produktu");
 		}
 
-		var authorizationResult = _authorizationService.AuthorizeAsync(userPrincipal, product, new ResourceOperationRequirement(ResourceOperation.Delete)).Result;
+		var authorizationResult = _authorizationService
+			.AuthorizeAsync(userPrincipal, product, new ResourceOperationRequirement(ResourceOperation.Delete)).Result;
 
 		if (!authorizationResult.Succeeded)
 		{
-			throw new ForbidException("Forbidden for this user");
+			throw new ForbidException("Zabronione dla tego użytkownika");
 		}
 
 		_dbContext.Remove(product);
@@ -174,33 +176,33 @@ public class ProductService : IProductService
 
 		if (product is null)
 		{
-			throw new NotFoundException("Product not found");
+			throw new NotFoundException("Nie znaleziono produktu");
 		}
-		
-		
-		var authorizationResult = _authorizationService.AuthorizeAsync(userPrincipal, product, new ResourceOperationRequirement(ResourceOperation.Update)).Result;
+
+		var authorizationResult = _authorizationService.AuthorizeAsync(userPrincipal, product,
+			new ResourceOperationRequirement(ResourceOperation.Update)).Result;
 
 		if (!authorizationResult.Succeeded)
 		{
-			throw new ForbidException("Forbidden for this user");
+			throw new ForbidException("Zabronione dla tego użytkownika");
 		}
+		
+		var existingAssignment = _dbContext.ProductHasAllergens
+			.FirstOrDefault(x => x.ProductId == productId && x.AllergenId == allergenId);
 
-		ProductHasAllergen assignment = new ProductHasAllergen()
+		if (existingAssignment != null)
+		{
+			throw new BadRequestException("Już przypisano");
+		}
+		
+		var assignment = new ProductHasAllergen()
 		{
 			ProductId = productId,
 			AllergenId = allergenId
 		};
-
-		var existingAssignment = _dbContext.ProductHasAllergens.FirstOrDefault(x => x.ProductId == productId && x.AllergenId == allergenId);
-
-		if (existingAssignment != null)
-		{
-			throw new BadRequestException("Already assigned");
-		}
 		
 		_dbContext.ProductHasAllergens.Add(assignment);
 		_dbContext.SaveChanges();
-		
 	}
 
 	public void UnassignAllergen(int productId, int allergenId, ClaimsPrincipal userPrincipal)
@@ -211,22 +213,22 @@ public class ProductService : IProductService
 
 		if (product is null)
 		{
-			throw new NotFoundException("Product not found");
+			throw new NotFoundException("Nie znaleziono produktu");
 		}
-
 		
 		var authorizationResult = _authorizationService.AuthorizeAsync(userPrincipal, product, new ResourceOperationRequirement(ResourceOperation.Update)).Result;
 
 		if (!authorizationResult.Succeeded)
 		{
-			throw new ForbidException("Forbidden for this user");
+			throw new ForbidException("Zabronione dla tego użytkownika");
 		}
 
-		var existingAssignment = _dbContext.ProductHasAllergens.FirstOrDefault(x => x.ProductId == productId && x.AllergenId == allergenId);
+		var existingAssignment = _dbContext.ProductHasAllergens
+			.FirstOrDefault(x => x.ProductId == productId && x.AllergenId == allergenId);
 
 		if (existingAssignment is null)
 		{
-			throw new BadRequestException("Assignment does not exist");
+			throw new BadRequestException("Przypisanie nie istnieje");
 		}
 
 		_dbContext.Remove(existingAssignment);
@@ -246,7 +248,7 @@ public class ProductService : IProductService
 
 		if (products is null)
 		{
-			throw new NotFoundException("Product not found");
+			throw new NotFoundException("Nie znaleziono produktu");
 		}
 		
 		//var filteredProducts = products.Where(p => p.ProductAllergens.All(c => filters.ToList().Contains(c.Allergen.Name)));

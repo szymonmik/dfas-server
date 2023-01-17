@@ -35,11 +35,6 @@ public class AllergenController : ControllerBase
 	{
 		var allergen = _allergenService.GetAllergenById(id);
 
-		if (allergen is null)
-		{
-			return NotFound();
-		}
-        
 		return Ok(allergen);
 	}
 	
@@ -62,11 +57,6 @@ public class AllergenController : ControllerBase
 	{
 		var allergenType = _allergenService.GetAllergenTypeById(id);
 
-		if (allergenType is null)
-		{
-			return NotFound();
-		}
-        
 		return Ok(allergenType);
 	}
 }

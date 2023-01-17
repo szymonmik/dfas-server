@@ -61,13 +61,13 @@ public class UserService : IUserService
 
 		if(user is null)
 		{
-			throw new BadRequestException("Invalid username or password");
+			throw new BadRequestException("Nieprawidłowy email lub hasło");
 		}
 
 		var result = _passwordHasher.VerifyHashedPassword(user, user.PasswordHash, dto.Password);
 		if(result == PasswordVerificationResult.Failed)
 		{
-			throw new BadRequestException("Invalid username or password");
+			throw new BadRequestException("Nieprawidłowy email lub hasło");
 		}
 
 		var claims = new List<Claim>()
@@ -92,7 +92,7 @@ public class UserService : IUserService
 		var tokenString = tokenHandler.WriteToken(token);
 		
 		var userDto = _mapper.Map<UserDto>(user);
-		AuthenticationResponse authenticationResponse = new AuthenticationResponse(userDto, tokenString);
+		var authenticationResponse = new AuthenticationResponse(userDto, tokenString);
 		return authenticationResponse;
 	}
 
@@ -107,14 +107,14 @@ public class UserService : IUserService
 
 		if (user is null)
 		{
-			throw new NotFoundException("User not found");
+			throw new NotFoundException("Nie znaleziono użytkownika");
 		}
 
 		var authorizationResult = _authorizationService.AuthorizeAsync(userPrincipal, user, new ResourceOperationRequirement(ResourceOperation.Update)).Result;
 
 		if (!authorizationResult.Succeeded)
 		{
-			throw new ForbidException("Forbidden for this user");
+			throw new ForbidException("Zabronione dla tego użytkownika");
 		}
 		
 		var userDto = _mapper.Map<UserDto>(user);
@@ -128,14 +128,14 @@ public class UserService : IUserService
 
 		if (user is null)
 		{
-			throw new NotFoundException("User not found");
+			throw new NotFoundException("Nie znaleziono użytkownika");
 		}
 		
 		var authorizationResult = _authorizationService.AuthorizeAsync(userPrincipal, user, new ResourceOperationRequirement(ResourceOperation.Update)).Result;
 
 		if (!authorizationResult.Succeeded)
 		{
-			throw new ForbidException("Forbidden for this user");
+			throw new ForbidException("Zabronione dla tego użytkownika");
 		}
 
 		user.RegionId = dto.RegionId;
@@ -149,14 +149,14 @@ public class UserService : IUserService
 
 		if (user is null)
 		{
-			throw new NotFoundException("User not found");
+			throw new NotFoundException("Nie znaleziono użytkownika");
 		}
 
 		var authorizationResult = _authorizationService.AuthorizeAsync(userPrincipal, user, new ResourceOperationRequirement(ResourceOperation.Update)).Result;
 
 		if (!authorizationResult.Succeeded)
 		{
-			throw new ForbidException("Forbidden for this user");
+			throw new ForbidException("Zabronione dla tego użytkownika");
 		}
 
 		user.Name = dto.Name;
@@ -170,14 +170,14 @@ public class UserService : IUserService
 
 		if (user is null)
 		{
-			throw new NotFoundException("User not found");
+			throw new NotFoundException("Nie znaleziono użytkownika");
 		}
 
 		var authorizationResult = _authorizationService.AuthorizeAsync(userPrincipal, user, new ResourceOperationRequirement(ResourceOperation.Update)).Result;
 
 		if (!authorizationResult.Succeeded)
 		{
-			throw new ForbidException("Forbidden for this user");
+			throw new ForbidException("Zabronione dla tego użytkownika");
 		}
 
 		if (dto.Sex == 'k' || dto.Sex == 'm') user.Sex = dto.Sex;
@@ -191,14 +191,15 @@ public class UserService : IUserService
 
 		if (user is null)
 		{
-			throw new NotFoundException("User not found");
+			throw new NotFoundException("Nie znaleziono użytkownika");
 		}
 
-		var authorizationResult = _authorizationService.AuthorizeAsync(userPrincipal, user, new ResourceOperationRequirement(ResourceOperation.Update)).Result;
+		var authorizationResult = _authorizationService.AuthorizeAsync(userPrincipal, user, 
+			new ResourceOperationRequirement(ResourceOperation.Update)).Result;
 
 		if (!authorizationResult.Succeeded)
 		{
-			throw new ForbidException("Forbidden for this user");
+			throw new ForbidException("Zabronione dla tego użytkownika");
 		}
 
 		if(dto.Sex == 'k' || dto.Sex == 'm')user.Sex = dto.Sex;
@@ -214,14 +215,14 @@ public class UserService : IUserService
 
 		if (user is null)
 		{
-			throw new NotFoundException("User not found");
+			throw new NotFoundException("Nie znaleziono użytkownika");
 		}
 
 		var authorizationResult = _authorizationService.AuthorizeAsync(userPrincipal, user, new ResourceOperationRequirement(ResourceOperation.Update)).Result;
 
 		if (!authorizationResult.Succeeded)
 		{
-			throw new ForbidException("Forbidden for this user");
+			throw new ForbidException("Zabronione dla tego użytkownika");
 		}
 		
 		var newHashedPassword = _passwordHasher.HashPassword(user, dto.Password);
@@ -241,17 +242,17 @@ public class UserService : IUserService
 
 		if (allergen is null)
 		{
-			throw new NotFoundException("Allergen not found");
+			throw new NotFoundException("Nie znaleziono alergenu");
 		}
 
 		if (allergen.AllergenType.Name != "Wziewny")
 		{
-			throw new BadRequestException("Bad allergen type");
+			throw new BadRequestException("Zły typ alergenu");
 		}
 		
 		if (user is null)
 		{
-			throw new NotFoundException("User not found");
+			throw new NotFoundException("Nie znaleziono użytkownika");
 		}
 		
 		
@@ -259,14 +260,14 @@ public class UserService : IUserService
 
 		if (!authorizationResult.Succeeded)
 		{
-			throw new ForbidException("Forbidden for this user");
+			throw new ForbidException("Zabronione dla tego użytkownika");
 		}
 		
 		var existingAssignment = _context.UserHasAllergens.FirstOrDefault(x => x.UserId == userId && x.AllergenId == allergenId);
 
 		if (existingAssignment != null)
 		{
-			throw new BadRequestException("Already assigned");
+			throw new BadRequestException("Już przypisano");
 		}
 
 		var assignment = new UserHasAllergen
@@ -286,24 +287,73 @@ public class UserService : IUserService
 
 		if (user is null)
 		{
-			throw new NotFoundException("User not found");
+			throw new NotFoundException("Nie znaleziono użytkownika");
 		}
 
 		var authorizationResult = _authorizationService.AuthorizeAsync(userPrincipal, user, new ResourceOperationRequirement(ResourceOperation.Update)).Result;
 
 		if (!authorizationResult.Succeeded)
 		{
-			throw new ForbidException("Forbidden for this user");
+			throw new ForbidException("Zabronione dla tego użytkownika");
 		}
 
 		var existingAssignment = _context.UserHasAllergens.FirstOrDefault(x => x.UserId == userId && x.AllergenId == allergenId);
 
 		if (existingAssignment is null)
 		{
-			throw new BadRequestException("Assignment does not exist");
+			throw new BadRequestException("Przypisanie nie istnieje");
 		}
 
 		_context.Remove(existingAssignment);
+		_context.SaveChanges();
+	}
+
+	public string GeneratePasswordResetToken(ForgotPasswordDto dto)
+	{
+		var user = _context.Users.FirstOrDefault(x => x.Email == dto.Email);
+		if (user is null)
+		{
+			throw new NotFoundException("Nie znaleziono użytkownika");
+		}
+
+		var existingToken = _context.PasswordResetTokens.FirstOrDefault(x => x.UserId == user.Id);
+
+		if (existingToken != null)
+		{
+			return existingToken.Token;
+		}
+		
+		var token = Guid.NewGuid().ToString();
+		var passwordResetToken = new PasswordResetToken()
+		{
+			UserId = user.Id,
+			Token = token
+		};
+		_context.Add(passwordResetToken);
+		_context.SaveChanges();
+
+		return token;
+	}
+	
+	public void ResetPassword(ResetPasswordDto dto)
+	{
+		var user = _context.Users.FirstOrDefault(x => x.Id == dto.UserId);
+		if (user is null)
+		{
+			throw new NotFoundException("Nie znaleziono użytkownika");
+		}
+
+		var existingToken = _context.PasswordResetTokens.FirstOrDefault(x => x.UserId == dto.UserId && x.Token == dto.Token);
+
+		if (existingToken is null)
+		{
+			throw new BadRequestException("Nie udało się zweryfikować tokenu");
+		}
+		
+		var newHashedPassword = _passwordHasher.HashPassword(user, dto.Password);
+		user.PasswordHash = newHashedPassword;
+		
+		_context.Remove(existingToken);
 		_context.SaveChanges();
 	}
 }

@@ -23,10 +23,7 @@ public class AllergenService : IAllergenService
 	
 	public IEnumerable<AllergenDto> GetAllAllergens()
 	{
-		var allergens = _dbContext.Allergens
-			.Include(a => a.AllergenType)
-			.ToList();
-
+		var allergens = _dbContext.Allergens.Include(x => x.AllergenType).ToList();
 		var allergenDtos = _mapper.Map<List<AllergenDto>>(allergens);
 
 		return allergenDtos;
@@ -34,36 +31,28 @@ public class AllergenService : IAllergenService
 
 	public AllergenDto GetAllergenById(int allergenId)
 	{
-		var allergen = _dbContext.Allergens
-			.Include(a => a.AllergenType)
-			.FirstOrDefault(a => a.Id == allergenId);
-
+		var allergen = _dbContext.Allergens.Include(x => x.AllergenType).FirstOrDefault(x => x.Id == allergenId);
 		if (allergen is null)
 		{
-			throw new NotFoundException("Allergen not found");
+			throw new NotFoundException("Nie znaleziono alergenu");
 		}
 
 		var allergenDto = _mapper.Map<AllergenDto>(allergen);
-
 		return allergenDto;
 	}
 	
 	public IEnumerable<AllergenType> GetAllAllergenTypes()
 	{
-		var allergenTypes = _dbContext.AllergenTypes
-			.ToList();
-		
+		var allergenTypes = _dbContext.AllergenTypes.ToList();
 		return allergenTypes;
 	}
 	
 	public AllergenType GetAllergenTypeById(int allergenTypeId)
 	{
-		var allergenType = _dbContext.AllergenTypes
-			.FirstOrDefault(a => a.Id == allergenTypeId);
-
+		var allergenType = _dbContext.AllergenTypes.FirstOrDefault(x => x.Id == allergenTypeId);
 		if (allergenType is null)
 		{
-			throw new NotFoundException("Allergen not found");
+			throw new NotFoundException("Nie znaleziono typu alergenu");
 		}
 
 		return allergenType;

@@ -32,6 +32,8 @@ public class AppDbContext : DbContext
 	
 	public DbSet<PollinationCalendar> PollinationCalendars { get; set; }
 	
+	public DbSet<PasswordResetToken> PasswordResetTokens { get; set; }
+
 
 	protected override void OnModelCreating(ModelBuilder modelBuilder)
 	{
@@ -58,7 +60,15 @@ public class AppDbContext : DbContext
 		modelBuilder.Entity<Entry>()
 			.Property(u => u.Date)
 			.IsRequired();
-		
+
+		modelBuilder.Entity<PasswordResetToken>()
+			.Property(x => x.Token)
+			.IsRequired();
+
+		modelBuilder.Entity<PasswordResetToken>()
+			.Property(x => x.UserId)
+			.IsRequired();
+
 		// PRODUCT - ALLERGEN RELATIONSHIP
 		modelBuilder.Entity<ProductHasAllergen>()
 			.HasKey(x => new { x.ProductId, x.AllergenId });

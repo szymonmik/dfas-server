@@ -10,11 +10,13 @@ namespace server.Controllers;
 [Route("api/user/")]
 public class UserController : ControllerBase
 {
-    private IUserService _userService;
+    private readonly IUserService _userService;
+    private readonly IMailService _mailService;
 
-    public UserController(IUserService userService)
+    public UserController(IUserService userService, IMailService mailService)
     {
         _userService = userService;
+        _mailService = mailService;
     }
     
     /// <summary>
@@ -35,8 +37,7 @@ public class UserController : ControllerBase
     [Produces("application/json")]
     public ActionResult Authenticate([FromBody]LoginDto dto)
     {
-        AuthenticationResponse authenticationResponse;
-        authenticationResponse = _userService.GenerateJwt(dto);
+        var authenticationResponse = _userService.GenerateJwt(dto);
 
         return Ok(authenticationResponse);
     }
@@ -61,7 +62,7 @@ public class UserController : ControllerBase
     {
         _userService.UpdateUserRegion(userId, dto, User);
 
-        return NoContent();
+        return Ok();
     }
 
     /// <summary>
@@ -73,7 +74,7 @@ public class UserController : ControllerBase
     {
         _userService.UpdateUserName(userId, dto, User);
 
-        return NoContent();
+        return Ok();
     }
 
     /// <summary>
@@ -85,7 +86,7 @@ public class UserController : ControllerBase
     {
         _userService.UpdateUserSex(userId, dto, User);
 
-        return NoContent();
+        return Ok();
     }
 
     /// <summary>
@@ -97,7 +98,7 @@ public class UserController : ControllerBase
     {
         _userService.UpdateUser(userId, dto, User);
 
-        return NoContent();
+        return Ok();
     }
     
     /// <summary>
@@ -109,7 +110,7 @@ public class UserController : ControllerBase
     {
         _userService.UpdateUserPassword(userId, dto, User);
 
-        return NoContent();
+        return Ok();
     }
     
     /// <summary>
@@ -121,7 +122,7 @@ public class UserController : ControllerBase
     {
         _userService.AssignAllergen(allergenId, User);
 
-        return NoContent();
+        return Ok();
     }
     
     /// <summary>
@@ -133,6 +134,30 @@ public class UserController : ControllerBase
     {
         _userService.UnassignAllergen(allergenId, User);
 
-        return NoContent();
+        return Ok();
+    }
+    
+    /// <summary>
+    /// Send reset password email
+    /// </summary>
+    [HttpPost("forgotpassword")]
+    public async Task<ActionResult> SendPasswordResetEmail([FromBody] ForgotPasswordDto dto)
+    {
+        var token = _userService.GeneratePasswordResetToken(dto);
+        
+        await _mailService.SendPasswordReset(dto, token);
+
+        return Ok();
+    }
+    
+    /// <summary>
+    /// Resets password
+    /// </summary>
+    [HttpPost("resetpassword")]
+    public ActionResult ResetPassword([FromBody] ResetPasswordDto dto)
+    {
+        _userService.ResetPassword(dto);
+
+        return Ok();
     }
 }

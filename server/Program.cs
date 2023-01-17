@@ -57,6 +57,7 @@ builder.Services.AddAuthentication(option =>
 	};
 });
 
+
 builder.Services.AddAuthorization();
 builder.Services.AddScoped<IAuthorizationHandler, ResourceOperationRequirementHandler>();
 builder.Services.AddScoped<IAuthorizationHandler, ProductResourceOperationRequirementHandler>();
@@ -79,10 +80,13 @@ builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<IEntryService, EntryService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IPollinationService, PollinationService>();
+builder.Services.AddScoped<IMailService, MailService>();
 builder.Services.AddScoped<ErrorHandlingMiddleware>();
 builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
 builder.Services.AddScoped<IValidator<RegisterUserDto>, RegisterUserDtoValidator>();
 builder.Services.AddScoped<IValidator<UpdateUserPasswordDto>, UpdateUserPasswordDtoValidator>();
+builder.Services.AddScoped<IValidator<ForgotPasswordDto>, ForgotPasswordDtoValidator>();
+builder.Services.AddScoped<IValidator<ResetPasswordDto>, ResetPasswordDtoValidator>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

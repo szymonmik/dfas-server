@@ -38,7 +38,7 @@ public class ErrorHandlingMiddleware : IMiddleware
 			_logger.LogError(e, e.Message);
 			
 			context.Response.StatusCode = 500;
-			await context.Response.WriteAsync("Something went wrong");
+			await context.Response.WriteAsync("Coś poszło nie tak");
 		}
 	}
 }

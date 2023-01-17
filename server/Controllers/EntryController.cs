@@ -25,7 +25,6 @@ public class EntryController : ControllerBase
 	[Authorize]
 	public ActionResult<IEnumerable<EntryDto>> GetAllCurrentUser()
 	{
-		//var userId = int.Parse(User.FindFirst(c => c.Type == ClaimTypes.NameIdentifier).Value);
 		var entries = _entryService.GetAllCurrentUser(User);
         
 		return Ok(entries);
@@ -38,7 +37,6 @@ public class EntryController : ControllerBase
 	[Authorize]
 	public ActionResult<EntryDto> GetById([FromRoute]int entryId)
 	{
-		//var userId = int.Parse(User.FindFirst(c => c.Type == ClaimTypes.NameIdentifier).Value);
 		var entry = _entryService.GetById(entryId, User);
 
 		return Ok(entry);
@@ -52,7 +50,6 @@ public class EntryController : ControllerBase
 	[Authorize]
 	public ActionResult<EntryDto> GetByDate([FromRoute]string entryDate)
 	{
-		//var userId = int.Parse(User.FindFirst(c => c.Type == ClaimTypes.NameIdentifier).Value);
 		var entry = _entryService.GetByDate(entryDate, User);
 
 		return Ok(entry);
@@ -66,7 +63,6 @@ public class EntryController : ControllerBase
 	[Authorize]
 	public ActionResult CreateEmpty([FromBody] CreateEntryDto dto)
 	{
-		//var userId = int.Parse(User.FindFirst(c => c.Type == ClaimTypes.NameIdentifier).Value);
 		var id = _entryService.CreateEmptyEntry(dto, User);
 
 		return Created($"/api/entry/{id}", null);
@@ -93,7 +89,6 @@ public class EntryController : ControllerBase
 	[Authorize]
 	public ActionResult AssignProduct([FromRoute] string entryDate, [FromRoute] int productId)
 	{
-		//var userId = int.Parse(User.FindFirst(c => c.Type == ClaimTypes.NameIdentifier).Value);
 		_entryService.AssignProduct(entryDate, productId, User);
 
 		return Ok();
@@ -107,7 +102,6 @@ public class EntryController : ControllerBase
 	[Authorize]
 	public ActionResult UnassignProduct([FromRoute] string entryDate, [FromRoute] int productId)
 	{
-		//var userId = int.Parse(User.FindFirst(c => c.Type == ClaimTypes.NameIdentifier).Value);
 		_entryService.UnassignProduct(entryDate, productId, User);
 
 		return Ok();
@@ -121,7 +115,6 @@ public class EntryController : ControllerBase
 	[Authorize]
 	public ActionResult AssignSymptom([FromRoute] string entryDate, [FromRoute] int symptomId)
 	{
-		//var userId = int.Parse(User.FindFirst(c => c.Type == ClaimTypes.NameIdentifier).Value);
 		_entryService.AssignSymptom(entryDate, symptomId, User);
 
 		return Ok();
@@ -135,7 +128,6 @@ public class EntryController : ControllerBase
 	[Authorize]
 	public ActionResult UnassignSymptom([FromRoute] string entryDate, [FromRoute] int symptomId)
 	{
-		//var userId = int.Parse(User.FindFirst(c => c.Type == ClaimTypes.NameIdentifier).Value);
 		_entryService.UnassignSymptom(entryDate, symptomId, User);
 
 		return Ok();

@@ -103,7 +103,6 @@ public class ProductController : ControllerBase
     [Authorize]
     public ActionResult AssignAllergen([FromRoute] int productId, [FromRoute] int allergenId)
     {
-        //var userId = int.Parse(User.FindFirst(c => c.Type == ClaimTypes.NameIdentifier).Value);
         _productService.AssignAllergen(productId, allergenId, User);
 
         return Ok();
@@ -121,7 +120,6 @@ public class ProductController : ControllerBase
     [Authorize]
     public ActionResult UnassignAllergen([FromRoute] int productId, [FromRoute] int allergenId)
     {
-        //var userId = int.Parse(User.FindFirst(c => c.Type == ClaimTypes.NameIdentifier).Value);
         _productService.UnassignAllergen(productId, allergenId, User);
 
         return Ok();

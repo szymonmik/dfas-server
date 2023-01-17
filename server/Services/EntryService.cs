@@ -29,7 +29,7 @@ public class EntryService : IEntryService
 
 		if (user is null)
 		{
-			throw new NotFoundException("User not found");
+			throw new NotFoundException("Nie znaleziono użytkownika");
 		}
 		
 		var entries = _dbContext.Entries
@@ -50,7 +50,7 @@ public class EntryService : IEntryService
 
 		if (user is null)
 		{
-			throw new NotFoundException("User not found");
+			throw new NotFoundException("Nie znaleziono użytkownika");
 		}
 
 		var entry = _dbContext.Entries
@@ -60,7 +60,7 @@ public class EntryService : IEntryService
 		
 		if (entry is null)
 		{
-			throw new NotFoundException("Entry not found");
+			throw new NotFoundException("Nie znaleziono wpisu");
 		}
 		
 		var entryDto = _mapper.Map<EntryDto>(entry);
@@ -75,7 +75,7 @@ public class EntryService : IEntryService
 
 		if (user is null)
 		{
-			throw new NotFoundException("User not found");
+			throw new NotFoundException("Nie znaleziono użytkownika");
 		}
 
 		var parsedDate = DateTime.Parse(entryDate);
@@ -92,7 +92,7 @@ public class EntryService : IEntryService
 
 		if (entry is null)
 		{
-			throw new NotFoundException("Entry not found");
+			throw new NotFoundException("Nie znaleziono wpisu");
 		}
 		
 		var entryDto = _mapper.Map<EntryDto>(entry);
@@ -104,26 +104,22 @@ public class EntryService : IEntryService
 	{
 		var userId = int.Parse(userPrincipal.FindFirst(c => c.Type == ClaimTypes.NameIdentifier).Value);
 		var user = _dbContext.Users.FirstOrDefault(u => u.Id == userId);
-
 		if (user is null)
 		{
-			throw new NotFoundException("User not found");
+			throw new NotFoundException("Nie znaleziono użytkownika");
 		}
 
 		if (dto.Date is null)
 		{
-			throw new BadRequestException("Date not provided");
+			throw new BadRequestException("Nie podano daty");
 		}
 
 		var parsedDate = DateTime.Parse(dto.Date);
 
 		var existingEntry = _dbContext.Entries.FirstOrDefault(x => x.UserId == userId && x.Date.Value == parsedDate);
-		
-		Console.WriteLine(parsedDate.ToString());
 		if (existingEntry != null)
 		{
-			Console.WriteLine(existingEntry.Date.Value.ToString());
-			throw new BadRequestException("Entry for today and this user already exists");
+			throw new BadRequestException("Wpis na dzisiaj dla bieżącego użytkownika już istnieje");
 		}
 
 		var newEntry = new Entry
@@ -135,7 +131,6 @@ public class EntryService : IEntryService
 		_dbContext.Entries.Add(newEntry);
 		_dbContext.SaveChanges();
 		
-		Console.Write(newEntry.Date.Value.ToString());
 		return newEntry.Id;
 	}
 
@@ -143,7 +138,7 @@ public class EntryService : IEntryService
 	{
 		if (entryDate is null)
 		{
-			throw new BadRequestException("Date not provided");
+			throw new BadRequestException("Nie podano daty");
 		}
 
 		var parsedDate = DateTime.Parse(entryDate);
@@ -153,7 +148,7 @@ public class EntryService : IEntryService
 
 		if (user is null)
 		{
-			throw new NotFoundException("User not found");
+			throw new NotFoundException("Nie znaleziono użytkownika");
 		}
 		
 		var entry = _dbContext.Entries
@@ -163,14 +158,14 @@ public class EntryService : IEntryService
 
 		if (entry is null)
 		{
-			throw new NotFoundException("Entry not found");
+			throw new NotFoundException("Nie znaleziono wpisu");
 		}
 
 		var authorizationResult = _authorizationService.AuthorizeAsync(userPrincipal, entry, new ResourceOperationRequirement(ResourceOperation.Delete)).Result;
 
 		if (!authorizationResult.Succeeded)
 		{
-			throw new ForbidException("Forbidden for this user");
+			throw new ForbidException("Zabronione dla tego użytkownika");
 		}
 
 		_dbContext.Remove(entry);
@@ -181,7 +176,7 @@ public class EntryService : IEntryService
 	{
 		if (entryDate is null)
 		{
-			throw new BadRequestException("Date not provided");
+			throw new BadRequestException("Nie podano daty");
 		}
 		
 		var parsedDate = DateTime.Parse(entryDate);
@@ -191,7 +186,7 @@ public class EntryService : IEntryService
 		
 		if (user is null)
 		{
-			throw new NotFoundException("User not found");
+			throw new NotFoundException("Nie znaleziono użytkownika");
 		}
 		
 		var entry = _dbContext.Entries
@@ -201,21 +196,21 @@ public class EntryService : IEntryService
 
 		if (entry is null)
 		{
-			throw new NotFoundException("Entry not found");
+			throw new NotFoundException("Nie znaleziono wpisu");
 		}
 		
 		var authorizationResult = _authorizationService.AuthorizeAsync(userPrincipal, entry, new ResourceOperationRequirement(ResourceOperation.Update)).Result;
 
 		if (!authorizationResult.Succeeded)
 		{
-			throw new ForbidException("Forbidden for this user");
+			throw new ForbidException("Zabronione dla tego użytkownika");
 		}
 		
 		var existingAssignment = _dbContext.EntryHasProducts.FirstOrDefault(x => x.EntryId == entry.Id && x.ProductId == productId);
 
 		if (existingAssignment != null)
 		{
-			throw new BadRequestException("Already assigned");
+			throw new BadRequestException("Już przypisano");
 		}
 
 		var assignment = new EntryHasProduct()
@@ -232,7 +227,7 @@ public class EntryService : IEntryService
 	{
 		if (entryDate is null)
 		{
-			throw new BadRequestException("Date not provided");
+			throw new BadRequestException("Nie podano daty");
 		}
 		
 		var parsedDate = DateTime.Parse(entryDate);
@@ -242,7 +237,7 @@ public class EntryService : IEntryService
 		
 		if (user is null)
 		{
-			throw new NotFoundException("User not found");
+			throw new NotFoundException("Nie znaleziono użytkownika");
 		}
 		
 		var entry = _dbContext.Entries
@@ -252,21 +247,21 @@ public class EntryService : IEntryService
 
 		if (entry is null)
 		{
-			throw new NotFoundException("Entry not found");
+			throw new NotFoundException("Nie znaleziono wpisu");
 		}
 		
 		var authorizationResult = _authorizationService.AuthorizeAsync(userPrincipal, entry, new ResourceOperationRequirement(ResourceOperation.Update)).Result;
 
 		if (!authorizationResult.Succeeded)
 		{
-			throw new ForbidException("Forbidden for this user");
+			throw new ForbidException("Zabronione dla tego użytkownika");
 		}
 
 		var existingAssignment = _dbContext.EntryHasProducts.FirstOrDefault(x => x.EntryId == entry.Id && x.ProductId == productId);
 
 		if (existingAssignment is null)
 		{
-			throw new BadRequestException("Assignment does not exist");
+			throw new BadRequestException("Przypisanie nie istnieje");
 		}
 
 		_dbContext.Remove(existingAssignment);
@@ -277,7 +272,7 @@ public class EntryService : IEntryService
 	{
 		if (entryDate is null)
 		{
-			throw new BadRequestException("Date not provided");
+			throw new BadRequestException("Nie podano daty");
 		}
 		
 		var parsedDate = DateTime.Parse(entryDate);
@@ -287,7 +282,7 @@ public class EntryService : IEntryService
 		
 		if (user is null)
 		{
-			throw new NotFoundException("User not found");
+			throw new NotFoundException("Nie znaleziono użytkownika");
 		}
 		
 		var entry = _dbContext.Entries
@@ -297,21 +292,21 @@ public class EntryService : IEntryService
 
 		if (entry is null)
 		{
-			throw new NotFoundException("Entry not found");
+			throw new NotFoundException("Nie znaleziono wpisu");
 		}
 		
 		var authorizationResult = _authorizationService.AuthorizeAsync(userPrincipal, entry, new ResourceOperationRequirement(ResourceOperation.Update)).Result;
 
 		if (!authorizationResult.Succeeded)
 		{
-			throw new ForbidException("Forbidden for this user");
+			throw new ForbidException("Zabronione dla tego użytkownika");
 		}
 		
 		var existingAssignment = _dbContext.EntryHasSymptoms.FirstOrDefault(x => x.EntryId == entry.Id && x.SymptomId == symptomId);
 
 		if (existingAssignment != null)
 		{
-			throw new BadRequestException("Already assigned");
+			throw new BadRequestException("Już przypisano");
 		}
 
 		var assignment = new EntryHasSymptom()
@@ -328,7 +323,7 @@ public class EntryService : IEntryService
 	{
 		if (entryDate is null)
 		{
-			throw new BadRequestException("Date not provided");
+			throw new BadRequestException("Nie podano daty");
 		}
 		
 		var parsedDate = DateTime.Parse(entryDate);
@@ -338,7 +333,7 @@ public class EntryService : IEntryService
 		
 		if (user is null)
 		{
-			throw new NotFoundException("User not found");
+			throw new NotFoundException("Nie znaleziono użytkownika");
 		}
 		
 		var entry = _dbContext.Entries
@@ -348,21 +343,21 @@ public class EntryService : IEntryService
 
 		if (entry is null)
 		{
-			throw new NotFoundException("Entry not found");
+			throw new NotFoundException("Nie znaleziono wpisu");
 		}
 		
 		var authorizationResult = _authorizationService.AuthorizeAsync(userPrincipal, entry, new ResourceOperationRequirement(ResourceOperation.Update)).Result;
 
 		if (!authorizationResult.Succeeded)
 		{
-			throw new ForbidException("Forbidden for this user");
+			throw new ForbidException("Zabronione dla tego użytkownika");
 		}
 
 		var existingAssignment = _dbContext.EntryHasSymptoms.FirstOrDefault(x => x.EntryId == entry.Id && x.SymptomId == symptomId);
 
 		if (existingAssignment is null)
 		{
-			throw new BadRequestException("Assignment does not exist");
+			throw new BadRequestException("Przypisanie nie istnieje");
 		}
 
 		_dbContext.Remove(existingAssignment);

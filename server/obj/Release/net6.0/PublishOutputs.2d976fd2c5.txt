@@ -10,6 +10,7 @@ C:\Users\Szy\RiderProjects\dfas-server\server\obj\Release\net6.0\PubTmp\Out\Auto
 C:\Users\Szy\RiderProjects\dfas-server\server\obj\Release\net6.0\PubTmp\Out\FluentValidation.dll
 C:\Users\Szy\RiderProjects\dfas-server\server\obj\Release\net6.0\PubTmp\Out\FluentValidation.AspNetCore.dll
 C:\Users\Szy\RiderProjects\dfas-server\server\obj\Release\net6.0\PubTmp\Out\FluentValidation.DependencyInjectionExtensions.dll
+C:\Users\Szy\RiderProjects\dfas-server\server\obj\Release\net6.0\PubTmp\Out\MailKit.dll
 C:\Users\Szy\RiderProjects\dfas-server\server\obj\Release\net6.0\PubTmp\Out\Microsoft.AspNetCore.Authentication.JwtBearer.dll
 C:\Users\Szy\RiderProjects\dfas-server\server\obj\Release\net6.0\PubTmp\Out\Microsoft.AspNetCore.Cryptography.Internal.dll
 C:\Users\Szy\RiderProjects\dfas-server\server\obj\Release\net6.0\PubTmp\Out\Microsoft.AspNetCore.Cryptography.KeyDerivation.dll
@@ -28,10 +29,12 @@ C:\Users\Szy\RiderProjects\dfas-server\server\obj\Release\net6.0\PubTmp\Out\Micr
 C:\Users\Szy\RiderProjects\dfas-server\server\obj\Release\net6.0\PubTmp\Out\Microsoft.IdentityModel.Tokens.dll
 C:\Users\Szy\RiderProjects\dfas-server\server\obj\Release\net6.0\PubTmp\Out\Microsoft.OpenApi.dll
 C:\Users\Szy\RiderProjects\dfas-server\server\obj\Release\net6.0\PubTmp\Out\Microsoft.Win32.SystemEvents.dll
+C:\Users\Szy\RiderProjects\dfas-server\server\obj\Release\net6.0\PubTmp\Out\MimeKit.dll
 C:\Users\Szy\RiderProjects\dfas-server\server\obj\Release\net6.0\PubTmp\Out\Newtonsoft.Json.dll
 C:\Users\Szy\RiderProjects\dfas-server\server\obj\Release\net6.0\PubTmp\Out\NLog.dll
 C:\Users\Szy\RiderProjects\dfas-server\server\obj\Release\net6.0\PubTmp\Out\NLog.Extensions.Logging.dll
 C:\Users\Szy\RiderProjects\dfas-server\server\obj\Release\net6.0\PubTmp\Out\NLog.Web.AspNetCore.dll
+C:\Users\Szy\RiderProjects\dfas-server\server\obj\Release\net6.0\PubTmp\Out\BouncyCastle.Crypto.dll
 C:\Users\Szy\RiderProjects\dfas-server\server\obj\Release\net6.0\PubTmp\Out\Swashbuckle.AspNetCore.Swagger.dll
 C:\Users\Szy\RiderProjects\dfas-server\server\obj\Release\net6.0\PubTmp\Out\Swashbuckle.AspNetCore.SwaggerGen.dll
 C:\Users\Szy\RiderProjects\dfas-server\server\obj\Release\net6.0\PubTmp\Out\Swashbuckle.AspNetCore.SwaggerUI.dll

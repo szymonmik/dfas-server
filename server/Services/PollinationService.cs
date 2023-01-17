@@ -20,7 +20,7 @@ public class PollinationService : IPollinationService
 		_mapper = mapper;
 		_authorizationService = authorizationService;
 	}
-	public IEnumerable<PollinationCalendar> GetByDate(int regionId, string date, ClaimsPrincipal userPrincipal)
+	public IEnumerable<PollinationCalendar> GetByDate(int regionId, string date)
 	{
 		var parsedDate = DateTime.Parse(date);
 		var pollinationCalendar = _dbContext.PollinationCalendars

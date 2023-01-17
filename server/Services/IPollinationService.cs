@@ -5,6 +5,6 @@ namespace server.Services;
 
 public interface IPollinationService
 {
-	IEnumerable<PollinationCalendar> GetByDate(int regionId, string date, ClaimsPrincipal userPrincipal);
+	IEnumerable<PollinationCalendar> GetByDate(int regionId, string date);
 	void FillRandomOnDate(string date);
 }

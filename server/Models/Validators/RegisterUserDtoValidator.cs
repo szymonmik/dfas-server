@@ -13,7 +13,7 @@ public class RegisterUserDtoValidator : AbstractValidator<RegisterUserDto>
 
 		RuleFor(x => x.Password)
 			.MinimumLength(8)
-			.WithMessage("Hasło za krótkie.");
+			.WithMessage("Hasło musi mieć co najmniej 8 znaków");
 
 		RuleFor(x => x.ConfirmPassword).Equal(e => e.Password).WithMessage("Hasła nie są zgodne.");
 		
@@ -30,3 +30,4 @@ public class RegisterUserDtoValidator : AbstractValidator<RegisterUserDto>
 			});
 	}
 }
+

@@ -16,4 +16,6 @@ public interface IUserService
 	void UpdateUserPassword(int id, UpdateUserPasswordDto dto, ClaimsPrincipal userPrincipal);
 	void AssignAllergen(int allergenId, ClaimsPrincipal userPrincipal);
 	void UnassignAllergen(int allergenId, ClaimsPrincipal userPrincipal);
+	string GeneratePasswordResetToken(ForgotPasswordDto dto);
+	void ResetPassword(ResetPasswordDto dto);
 }

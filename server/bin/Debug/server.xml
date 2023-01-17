@@ -209,5 +209,15 @@
             Unassigns allergen from own account
             </summary>
         </member>
+        <member name="M:server.Controllers.UserController.SendPasswordResetEmail(server.Models.ForgotPasswordDto)">
+            <summary>
+            Send reset password email
+            </summary>
+        </member>
+        <member name="M:server.Controllers.UserController.ResetPassword(server.Models.ResetPasswordDto)">
+            <summary>
+            Resets password
+            </summary>
+        </member>
     </members>
 </doc>

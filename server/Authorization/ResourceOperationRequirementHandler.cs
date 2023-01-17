@@ -6,13 +6,14 @@ namespace server.Authorization;
 
 public class ResourceOperationRequirementHandler : AuthorizationHandler<ResourceOperationRequirement, User>
 {
-	protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, ResourceOperationRequirement requirement, User user)
+	protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, 
+		ResourceOperationRequirement requirement, User user)
 	{
-		/*
-		if(requirement.ResourceOperation == ResourceOperation.Read || requirement.ResourceOperation == ResourceOperation.Create)
+		if(requirement.ResourceOperation == ResourceOperation.Read 
+		   || requirement.ResourceOperation == ResourceOperation.Create)
 		{
 			context.Succeed(requirement);
-		}*/
+		}
 
 		var userId = context.User.FindFirst(c => c.Type == ClaimTypes.NameIdentifier).Value;
 
@@ -24,3 +25,4 @@ public class ResourceOperationRequirementHandler : AuthorizationHandler<Resource
 		return Task.CompletedTask;
 	}
 }
+

@@ -20,10 +20,9 @@ public class PollinationController : ControllerBase
 	/// </summary>
 	/// <remarks>Date format: rrrr-mm-dd</remarks>
 	[HttpGet("region/{regionId}/date/{date}")]
-	[Authorize]
-	public IActionResult GetByDate(int regionId, string date)
+	public IActionResult GetByDate([FromRoute] int regionId, [FromRoute] string date)
 	{
-		var pollination = _pollinationService.GetByDate(regionId, date, User);
+		var pollination = _pollinationService.GetByDate(regionId, date);
 
 		return Ok(pollination);
 	}
